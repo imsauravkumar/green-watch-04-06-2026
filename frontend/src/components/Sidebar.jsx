@@ -9,12 +9,13 @@ import {
   Camera,
   Bug,
   Sprout,
-  Compass,
-  MapPin,
+  FlaskConical,
   TrendingUp,
-  Store,
+  MapPin,
+  ShoppingBasket,
   Users,
-  MessageSquare,
+  MessageCircle,
+  ScrollText,
   User,
   ShieldCheck,
   LogOut
@@ -32,140 +33,125 @@ export const Sidebar = ({ isOpen, onClose }) => {
     navigate('/');
   };
 
-  const navItems = [
+  // ─── Grouped sections ────────────────────────────────────────────────────
+  const sections = [
     {
-      to: "/dashboard",
-      label: t('farmDashboard'),
-      icon: LayoutDashboard,
-      show: true
+      heading: 'OVERVIEW',
+      items: [
+        { to: '/dashboard', label: t('farmDashboard'),   icon: LayoutDashboard, show: true },
+        { to: '/weather',   label: t('weatherForecast'), icon: CloudSun,         show: true },
+      ],
     },
     {
-      to: "/weather",
-      label: t('weatherForecast'),
-      icon: CloudSun,
-      show: true
+      heading: 'FARMING TOOLS',
+      items: [
+        { to: '/crop-health',    label: t('cropHealth'),    icon: Camera,       show: isFarmer },
+        { to: '/pest-control',   label: t('pestDetection'), icon: Bug,          show: isFarmer },
+        { to: '/crop-rec',       label: t('cropRec'),       icon: Sprout,       show: isFarmer },
+        { to: '/fertilizer-rec', label: t('fertilizerRec'), icon: FlaskConical, show: isFarmer },
+        { to: '/market-prices',  label: t('marketPrice'),   icon: TrendingUp,   show: isFarmer },
+        { to: '/gps-mapping',    label: t('gpsMapping'),    icon: MapPin,       show: isFarmer },
+      ],
     },
     {
-      to: "/crop-health",
-      label: t('cropHealth'),
-      icon: Camera,
-      show: isFarmer
+      heading: 'COMMUNITY',
+      items: [
+        { to: '/marketplace',  label: t('navMarketplace'),      icon: ShoppingBasket, show: isFarmer || isSeller },
+        { to: '/community',    label: t('navCommunity'),        icon: Users,          show: true },
+        { to: '/chatbot',      label: t('expertChatbot'),       icon: MessageCircle,  show: true },
+        { to: '/gov-notices',  label: t('navGovNotices'),     icon: ScrollText,     show: true },
+      ],
     },
     {
-      to: "/pest-control",
-      label: t('pestDetection'),
-      icon: Bug,
-      show: isFarmer
+      heading: 'ACCOUNT',
+      items: [
+        { to: '/profile', label: t('navProfile'), icon: User,        show: true },
+        { to: '/admin',   label: t('navAdmin'),   icon: ShieldCheck, show: isAdmin },
+      ],
     },
-    {
-      to: "/crop-rec",
-      label: t('cropRec'),
-      icon: Sprout,
-      show: isFarmer
-    },
-    {
-      to: "/fertilizer-rec",
-      label: t('fertilizerRec'),
-      icon: Compass,
-      show: isFarmer
-    },
-    {
-      to: "/market-prices",
-      label: t('marketPrice'),
-      icon: TrendingUp,
-      show: isFarmer
-    },
-    {
-      to: "/gps-mapping",
-      label: t('gpsMapping'),
-      icon: MapPin,
-      show: isFarmer
-    },
-    {
-      to: "/marketplace",
-      label: t('navMarketplace'),
-      icon: Store,
-      show: isFarmer || isSeller
-    },
-    {
-      to: "/community",
-      label: t('navCommunity'),
-      icon: Users,
-      show: true
-    },
-    {
-      to: "/chatbot",
-      label: t('expertChatbot'),
-      icon: MessageSquare,
-      show: true
-    },
-    {
-      to: "/profile",
-      label: t('navProfile'),
-      icon: User,
-      show: true
-    },
-    {
-      to: "/admin",
-      label: t('navAdmin'),
-      icon: ShieldCheck,
-      show: isAdmin
-    }
   ];
 
   return (
     <>
-      {/* Mobile Backdrop */}
+      {/* Mobile backdrop */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 top-16 bg-slate-950/50 z-30 md:hidden"
+        <div
+          className="fixed inset-0 top-16 bg-black/50 z-30 md:hidden"
           onClick={onClose}
         />
       )}
-      <aside 
-        className={`fixed top-16 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col h-[calc(100vh-4rem)] border-r border-slate-800 transition-transform duration-300 md:translate-x-0 ${
+
+      <aside
+        className={`fixed top-16 left-0 z-40 w-64 bg-slate-900 flex flex-col h-[calc(100vh-4rem)] border-r border-slate-800 transition-transform duration-300 ease-in-out md:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Navigation Items list */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1.5">
-          {navItems
-            .filter(item => item.show)
-            .map((item) => {
-              const Icon = item.icon;
-              return (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
-                      isActive
-                        ? "bg-emerald-600 text-white font-semibold shadow-md shadow-emerald-900/10"
-                        : "hover:bg-slate-800 hover:text-white"
-                    }`
-                  }
-                >
-                  <Icon className="h-4 w-4 shrink-0" />
-                  <span>{item.label}</span>
-                </NavLink>
-              );
-            })}
+
+
+        {/* ── Nav sections ─────────────────────────────── */}
+        <nav className="flex-1 overflow-y-hidden py-4 px-3 space-y-5">
+          {sections.map((section, si) => {
+            const visible = section.items.filter(i => i.show);
+            if (visible.length === 0) return null;
+
+            return (
+              <div key={si}>
+                {/* Section heading */}
+                <p className="px-2 mb-1.5 text-[9px] font-bold tracking-widest text-slate-600 select-none">
+                  {section.heading}
+                </p>
+
+                {/* Section nav links */}
+                <div className="space-y-0.5">
+                  {visible.map(item => {
+                    const Icon = item.icon;
+                    return (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        onClick={onClose}
+                        className={({ isActive }) =>
+                          `group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-medium transition-all duration-150 ${
+                            isActive
+                              ? 'bg-emerald-600 text-white shadow shadow-emerald-900/30'
+                              : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                          }`
+                        }
+                      >
+                        {({ isActive }) => (
+                          <>
+                            <Icon
+                              className={`h-4 w-4 shrink-0 transition-colors ${
+                                isActive
+                                  ? 'text-white'
+                                  : 'text-slate-500 group-hover:text-slate-300'
+                              }`}
+                            />
+                            <span className="truncate">{item.label}</span>
+                          </>
+                        )}
+                      </NavLink>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </nav>
 
-        {/* Footer logout button */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950/40">
+        {/* ── Logout footer ──────────────────────────── */}
+        <div className="px-3 py-3 border-t border-slate-800 shrink-0">
           <button
             onClick={() => setShowLogoutConfirm(true)}
-            className="flex w-full items-center justify-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-400 hover:bg-red-950/20 hover:text-red-400 transition-colors"
+            className="group flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-semibold text-slate-500 hover:bg-red-950/30 hover:text-red-400 transition-all duration-150"
           >
-            <LogOut className="h-4 w-4 shrink-0" />
+            <LogOut className="h-4 w-4 shrink-0 group-hover:text-red-400 transition-colors" />
             <span>{t('navLogout')}</span>
           </button>
         </div>
-
       </aside>
 
-      {/* Logout confirmation popup modal */}
+      {/* Logout confirmation modal */}
       <Modal
         isOpen={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}
@@ -195,4 +181,5 @@ export const Sidebar = ({ isOpen, onClose }) => {
     </>
   );
 };
+
 export default Sidebar;

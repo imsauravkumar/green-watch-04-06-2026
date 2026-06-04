@@ -23,6 +23,7 @@ import FarmMap from './pages/FarmMap';
 import Community from './pages/Community';
 import Chatbot from './pages/Chatbot';
 import Marketplace from './pages/Marketplace';
+import GovernmentNotices from './pages/GovernmentNotices';
 
 // Layout shell for members/authenticated routes
 const MemberLayout = ({ children }) => {
@@ -146,6 +147,13 @@ export const App = () => {
             <PrivateRoute adminOnly>
               <MemberLayout>
                 <AdminDashboard />
+              </MemberLayout>
+            </PrivateRoute>
+          } />
+          <Route path="/gov-notices" element={
+            <PrivateRoute>
+              <MemberLayout>
+                <GovernmentNotices />
               </MemberLayout>
             </PrivateRoute>
           } />

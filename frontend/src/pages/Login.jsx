@@ -313,7 +313,7 @@ export const Login = () => {
                 onChange={handleInputChange}
                 required
                 placeholder="••••••••"
-                className="w-full text-xs pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className={`w-full text-xs pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 ${error && error.toLowerCase().includes('invalid email or password') ? 'border-red-500' : ''}`}
               />
             </div>
           </div>

@@ -15,6 +15,7 @@ import communityRoutes from './routes/community.js';
 import weatherRoutes from './routes/weather.js';
 import adminRoutes from './routes/admin.js';
 import analysisRoutes from './routes/analysis.js';
+import noticesRoutes from './routes/notices.js';
 
 // Establish Database Connection
 connectDB();
@@ -25,16 +26,22 @@ const app = express();
 const allowedOrigins = [
   'https://green-watch-04-06-2026.vercel.app',
   'http://localhost:3000',
-  'http://localhost:5173'
+  'http://localhost:3001',
+  'http://localhost:5173',
+  'http://localhost:5174'
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, Postman)
+    // Allow requests with no origin (mobile apps, curl, Postman, Railway health checks)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
+    // Allow any Vercel preview/production subdomain
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
+    // Allow configured origins
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // Allow localhost on any port during development
+    if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
+    console.warn(`CORS blocked origin: ${origin}`);
     return callback(new Error(`CORS: Origin ${origin} not allowed`));
   },
   credentials: true,
@@ -58,6 +65,7 @@ app.use('/api/community', communityRoutes);
 app.use('/api/weather', weatherRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/analysis', analysisRoutes);
+app.use('/api/notices', noticesRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -91,6 +99,19 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ Port ${PORT} is already in use!`);
+    console.error(`   Run this command to free it:  npx kill-port ${PORT}`);
+    console.error(`   Or find the PID with:         netstat -ano | findstr :${PORT}`);
+    console.error(`   Then kill it with:             taskkill /F /PID <PID>\n`);
+    process.exit(1);
+  } else {
+    console.error('Server error:', err);
+    process.exit(1);
+  }
 });

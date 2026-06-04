@@ -38,7 +38,8 @@ const productSchema = new mongoose.Schema({
       buyerEmail: { type: String, required: true },
       buyerMobile: { type: String, required: true },
       quantity: { type: Number, required: true, default: 1 },
-      requestedAt: { type: Date, default: Date.now }
+      requestedAt: { type: Date, default: Date.now },
+      seen: { type: Boolean, default: false }
     }
   ],
   createdAt: {

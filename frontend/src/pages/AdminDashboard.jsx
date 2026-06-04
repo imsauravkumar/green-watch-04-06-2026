@@ -13,7 +13,8 @@ import {
   ShieldAlert,
   Search,
   Sparkles,
-  Megaphone
+  Megaphone,
+  ScrollText
 } from 'lucide-react';
 
 export const AdminDashboard = () => {
@@ -25,8 +26,10 @@ export const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [notices, setNotices] = useState([]);
   
   const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(null); // error when loading tab data fails
   const [actionMessage, setActionMessage] = useState(null); // { type: 'success'|'error', text: '' }
   
   // Search state
@@ -36,28 +39,63 @@ export const AdminDashboard = () => {
   const [broadcast, setBroadcast] = useState({ title: '', message: '', targetGroup: 'both' });
   const [sendingBroadcast, setSendingBroadcast] = useState(false);
 
+  // Notices state
+  const [newNotice, setNewNotice] = useState({ title: '', content: '', category: 'other', source: 'Government of India', isImportant: false });
+  const [creatingNotice, setCreatingNotice] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, [activeTab]);
 
   const fetchData = async () => {
     setLoading(true);
+    setFetchError(null);
     setActionMessage(null);
     const token = localStorage.getItem('greenwatch_token');
+
+    if (!token) {
+      setFetchError('No authentication token found. Please log out and log back in.');
+      setLoading(false);
+      return;
+    }
 
     try {
       if (activeTab === 'users') {
         const res = await apiFetch('/api/users', { headers: { 'Authorization': `Bearer ${token}` } });
-        if (res.ok) setUsers(await res.json());
+        if (res.ok) {
+          setUsers(await res.json());
+        } else {
+          const data = await res.json().catch(() => ({}));
+          setFetchError(`Failed to load users (${res.status}): ${data.message || 'Unauthorized or server error. Make sure you are logged in as admin.'}`);
+        }
       } else if (activeTab === 'products') {
         const res = await apiFetch('/api/products', { headers: { 'Authorization': `Bearer ${token}` } });
-        if (res.ok) setProducts(await res.json());
+        if (res.ok) {
+          setProducts(await res.json());
+        } else {
+          const data = await res.json().catch(() => ({}));
+          setFetchError(`Failed to load products (${res.status}): ${data.message || 'Server error.'}`);
+        }
       } else if (activeTab === 'messages') {
         const res = await apiFetch('/api/contact', { headers: { 'Authorization': `Bearer ${token}` } });
-        if (res.ok) setMessages(await res.json());
+        if (res.ok) {
+          setMessages(await res.json());
+        } else {
+          const data = await res.json().catch(() => ({}));
+          setFetchError(`Failed to load messages (${res.status}): ${data.message || 'Server error.'}`);
+        }
+      } else if (activeTab === 'notices') {
+        const res = await apiFetch('/api/notices', { headers: { 'Authorization': `Bearer ${token}` } });
+        if (res.ok) {
+          setNotices(await res.json());
+        } else {
+          const data = await res.json().catch(() => ({}));
+          setFetchError(`Failed to load notices (${res.status}): ${data.message || 'Server error.'}`);
+        }
       }
     } catch (err) {
       console.error("Error fetching admin data", err);
+      setFetchError(`Network error: ${err.message}. Check that the backend is reachable.`);
     } finally {
       setLoading(false);
     }
@@ -135,6 +173,57 @@ export const AdminDashboard = () => {
     }
   };
 
+  const handleCreateNotice = async (e) => {
+    e.preventDefault();
+    setCreatingNotice(true);
+    setActionMessage(null);
+    const token = localStorage.getItem('greenwatch_token');
+
+    try {
+      const res = await apiFetch('/api/notices', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newNotice)
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setActionMessage({ type: 'success', text: 'Government Notice published successfully!' });
+        setNewNotice({ title: '', content: '', category: 'other', source: 'Government of India', isImportant: false });
+        fetchData();
+      } else {
+        setActionMessage({ type: 'error', text: data.message || 'Failed to create notice' });
+      }
+    } catch (err) {
+      setActionMessage({ type: 'error', text: 'Server error creating notice' });
+    } finally {
+      setCreatingNotice(false);
+    }
+  };
+
+  const handleDeleteNotice = async (noticeId) => {
+    if (!window.confirm("Delete this government notice?")) return;
+    const token = localStorage.getItem('greenwatch_token');
+
+    try {
+      const res = await apiFetch(`/api/notices/${noticeId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setActionMessage({ type: 'success', text: 'Notice deleted successfully' });
+        setNotices(notices.filter(n => (n.id || n._id) !== noticeId));
+      } else {
+        const data = await res.json().catch(()=>({}));
+        setActionMessage({ type: 'error', text: data.message || 'Failed to delete notice' });
+      }
+    } catch (err) {
+      setActionMessage({ type: 'error', text: 'Server error deleting notice' });
+    }
+  };
+
   const filteredUsers = users.filter(u => 
     u.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -184,8 +273,26 @@ export const AdminDashboard = () => {
           >
             <Megaphone className="w-3.5 h-3.5" /> {t('tabBroadcasts')}
           </button>
+          <button
+            onClick={() => { setActiveTab('notices'); setSearchQuery(''); }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'notices' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}
+          >
+            <ScrollText className="w-3.5 h-3.5" /> Gov Notices
+          </button>
         </div>
       </div>
+
+      {/* Fetch error banner (when loading tab data fails) */}
+      {fetchError && (
+        <div className="p-3 rounded-lg text-xs font-semibold flex items-start gap-2 bg-red-50 text-red-800 border border-red-200">
+          <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="font-bold mb-0.5">Could not load data</p>
+            <p className="font-normal">{fetchError}</p>
+          </div>
+          <button onClick={fetchData} className="ml-2 text-red-700 underline text-[10px] hover:text-red-900 shrink-0">Retry</button>
+        </div>
+      )}
 
       {/* Action alerts banner */}
       {actionMessage && (
@@ -237,7 +344,9 @@ export const AdminDashboard = () => {
                 <tbody className="divide-y divide-slate-100 font-medium">
                   {filteredUsers.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-8 text-slate-400">{t('noUsersFoundFilter')}</td>
+                      <td colSpan={5} className="text-center py-8 text-slate-400">
+                        {fetchError ? '⚠ Could not load users — see error above' : t('noUsersFoundFilter')}
+                      </td>
                     </tr>
                   ) : (
                     filteredUsers.map((u) => (
@@ -416,6 +525,87 @@ export const AdminDashboard = () => {
                     <span>{sendingBroadcast ? t('sendingBroadcastBtn') : t('dispatchBroadcastBtn')}</span>
                   </button>
                 </form>
+              </div>
+            )}
+
+            {/* 5. GOV NOTICES TAB */}
+            {activeTab === 'notices' && (
+              <div className="p-6">
+                <div className="border-b border-slate-100 pb-3 mb-6 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <ScrollText className="w-5 h-5 text-emerald-600" />
+                    <div>
+                      <h3 className="font-bold text-slate-900 text-sm">Government Notices</h3>
+                      <p className="text-[10px] text-slate-400">Manage official schemes and advisories</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Create Notice Form */}
+                  <div className="md:col-span-1 bg-slate-50 border border-slate-100 rounded-xl p-5 h-fit">
+                    <h4 className="text-xs font-bold text-slate-800 mb-4">Post New Notice</h4>
+                    <form onSubmit={handleCreateNotice} className="space-y-4">
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-700 block mb-1">Title</label>
+                        <input type="text" required value={newNotice.title} onChange={e => setNewNotice({...newNotice, title: e.target.value})} className="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Notice title" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-1">Category</label>
+                          <select value={newNotice.category} onChange={e => setNewNotice({...newNotice, category: e.target.value})} className="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                            <option value="scheme">Scheme</option>
+                            <option value="advisory">Advisory</option>
+                            <option value="alert">Alert</option>
+                            <option value="subsidy">Subsidy</option>
+                            <option value="policy">Policy</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-700 block mb-1">Source</label>
+                          <input type="text" value={newNotice.source} onChange={e => setNewNotice({...newNotice, source: e.target.value})} className="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Govt of India" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-700 block mb-1">Content</label>
+                        <textarea required rows={4} value={newNotice.content} onChange={e => setNewNotice({...newNotice, content: e.target.value})} className="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 resize-none" placeholder="Notice details..." />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input type="checkbox" id="isImportant" checked={newNotice.isImportant} onChange={e => setNewNotice({...newNotice, isImportant: e.target.checked})} className="rounded text-emerald-600 focus:ring-emerald-500" />
+                        <label htmlFor="isImportant" className="text-[10px] font-bold text-slate-700">Mark as Important</label>
+                      </div>
+                      <button type="submit" disabled={creatingNotice} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2 rounded-lg transition-colors disabled:opacity-50">
+                        {creatingNotice ? 'Posting...' : 'Post Notice'}
+                      </button>
+                    </form>
+                  </div>
+
+                  {/* List of Notices */}
+                  <div className="md:col-span-2 space-y-3">
+                    <h4 className="text-xs font-bold text-slate-800 mb-2">Published Notices</h4>
+                    {notices.length === 0 ? (
+                      <div className="text-center py-10 bg-slate-50 border border-slate-100 rounded-xl text-slate-400 text-xs">No notices published yet.</div>
+                    ) : (
+                      notices.map(notice => (
+                        <div key={notice.id || notice._id} className={`bg-white border rounded-xl p-4 flex gap-4 ${notice.isImportant ? 'border-amber-200' : 'border-slate-200'}`}>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{notice.category}</span>
+                              {notice.isImportant && <span className="text-[9px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Important</span>}
+                            </div>
+                            <h5 className="text-sm font-bold text-slate-900 mb-1">{notice.title}</h5>
+                            <p className="text-[11px] text-slate-500 line-clamp-2 mb-2">{notice.content}</p>
+                            <div className="text-[9px] text-slate-400 font-medium">Source: {notice.source} | Posted: {new Date(notice.createdAt).toLocaleDateString()}</div>
+                          </div>
+                          <button onClick={() => handleDeleteNotice(notice.id || notice._id)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg h-fit transition-colors" title="Delete Notice">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
             )}
 

@@ -199,6 +199,7 @@ router.post('/:id/buy', protect, async (req, res) => {
   const productId = req.params.id;
   const quantityToBuy = parseInt(req.body.quantity || 1);
   const { buyerName, buyerEmail, buyerMobile } = req.body;
+  const buyerId = req.user.id || req.user._id?.toString();
 
   if (quantityToBuy <= 0) {
     return res.status(400).json({ message: "Quantity must be greater than zero" });
@@ -217,6 +218,11 @@ router.post('/:id/buy', protect, async (req, res) => {
         return res.status(404).json({ message: "Product not found" });
       }
 
+      // Prevent seller from buying own product
+      if (product.sellerId === buyerId) {
+        return res.status(403).json({ message: "You cannot buy your own product." });
+      }
+
       if (product.stock < quantityToBuy) {
         return res.status(400).json({ message: `Insufficient stock. Only ${product.stock} items left.` });
       }
@@ -230,7 +236,8 @@ router.post('/:id/buy', protect, async (req, res) => {
         buyerEmail,
         buyerMobile,
         quantity: quantityToBuy,
-        requestedAt: new Date().toISOString()
+        requestedAt: new Date().toISOString(),
+        seen: false
       });
 
       writeMockDb(db);
@@ -243,6 +250,11 @@ router.post('/:id/buy', protect, async (req, res) => {
         return res.status(404).json({ message: "Product not found" });
       }
 
+      // Prevent seller from buying own product
+      if (product.sellerId === buyerId) {
+        return res.status(403).json({ message: "You cannot buy your own product." });
+      }
+
       if (product.stock < quantityToBuy) {
         return res.status(400).json({ message: `Insufficient stock. Only ${product.stock} items left.` });
       }
@@ -256,7 +268,8 @@ router.post('/:id/buy', protect, async (req, res) => {
         buyerEmail,
         buyerMobile,
         quantity: quantityToBuy,
-        requestedAt: new Date()
+        requestedAt: new Date(),
+        seen: false
       });
 
       const updatedProduct = await product.save();
@@ -269,4 +282,94 @@ router.post('/:id/buy', protect, async (req, res) => {
   }
 });
 
+// @desc    Get buyer requests for a product (seller or admin only), marks them as seen
+// @route   GET /api/products/:id/buyers
+// @access  Private (owner or admin)
+router.get('/:id/buyers', protect, async (req, res) => {
+  const productId = req.params.id;
+  const userId = req.user.id || req.user._id?.toString();
+  const isAdmin = req.user.role === 'admin';
+
+  try {
+    if (isMockDb) {
+      const db = getMockDb();
+      const product = db.products.find(p => p.id === productId);
+
+      if (!product) return res.status(404).json({ message: "Product not found" });
+      if (product.sellerId !== userId && !isAdmin) {
+        return res.status(403).json({ message: "Not authorized to view buyer requests" });
+      }
+
+      // Mark all unseen requests as seen
+      if (product.buyRequests) {
+        product.buyRequests.forEach(r => { r.seen = true; });
+      }
+      writeMockDb(db);
+
+      return res.json(product.buyRequests || []);
+    } else {
+      const product = await Product.findById(productId);
+
+      if (!product) return res.status(404).json({ message: "Product not found" });
+      if (product.sellerId !== userId && !isAdmin) {
+        return res.status(403).json({ message: "Not authorized to view buyer requests" });
+      }
+
+      // Mark all unseen requests as seen
+      product.buyRequests.forEach(r => { r.seen = true; });
+      await product.save();
+
+      return res.json(product.buyRequests);
+    }
+  } catch (error) {
+    console.error("Get Buyers Error:", error);
+    res.status(500).json({ message: "Server error fetching buyer requests", error: error.message });
+  }
+});
+
+// @desc    Update product stock (seller or admin)
+// @route   PATCH /api/products/:id/stock
+// @access  Private (owner or admin)
+router.patch('/:id/stock', protect, async (req, res) => {
+  const productId = req.params.id;
+  const newStock = parseInt(req.body.stock);
+  const userId = req.user.id || req.user._id?.toString();
+  const isAdmin = req.user.role === 'admin';
+
+  if (isNaN(newStock) || newStock < 0) {
+    return res.status(400).json({ message: "Stock must be a non-negative number" });
+  }
+
+  try {
+    if (isMockDb) {
+      const db = getMockDb();
+      const product = db.products.find(p => p.id === productId);
+
+      if (!product) return res.status(404).json({ message: "Product not found" });
+      if (product.sellerId !== userId && !isAdmin) {
+        return res.status(403).json({ message: "Not authorized to update stock" });
+      }
+
+      product.stock = newStock;
+      writeMockDb(db);
+      return res.json({ message: "Stock updated successfully", stock: newStock, product });
+    } else {
+      const product = await Product.findById(productId);
+
+      if (!product) return res.status(404).json({ message: "Product not found" });
+      if (product.sellerId !== userId && !isAdmin) {
+        return res.status(403).json({ message: "Not authorized to update stock" });
+      }
+
+      product.stock = newStock;
+      const updated = await product.save();
+      return res.json({ message: "Stock updated successfully", stock: newStock, product: updated });
+    }
+  } catch (error) {
+    console.error("Update Stock Error:", error);
+    res.status(500).json({ message: "Server error updating stock", error: error.message });
+  }
+});
+
 export default router;
+

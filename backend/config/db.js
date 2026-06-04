@@ -79,7 +79,7 @@ export const connectDB = async () => {
       console.warn("⚠️ Could not check/drop index 'firebaseUid_1':", indexErr.message);
     }
     
-    // Seed default admin in MongoDB if not present
+    // Ensure admin exists with correct role and password in MongoDB
     const adminEmail = "sauravk1175@gmail.com";
     const adminExists = await User.findOne({ email: adminEmail });
     if (!adminExists) {
@@ -94,13 +94,21 @@ export const connectDB = async () => {
       });
       console.log("👤 Default admin user seeded in MongoDB.");
     } else {
-      // Ensure the admin password is correct
+      let needsSave = false;
+      // Always enforce admin role
+      if (adminExists.role !== "admin") {
+        adminExists.role = "admin";
+        needsSave = true;
+        console.log("🔧 Admin role corrected in MongoDB.");
+      }
+      // Sync password if wrong
       const isCorrect = await bcrypt.compare("admin@123", adminExists.password);
       if (!isCorrect) {
         adminExists.password = await bcrypt.hash("admin@123", 10);
-        await adminExists.save();
+        needsSave = true;
         console.log("👤 Default admin user password synchronized in MongoDB.");
       }
+      if (needsSave) await adminExists.save();
     }
   } catch (error) {
     console.error(`❌ MongoDB Connection Error: ${error.message}`);
