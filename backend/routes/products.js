@@ -192,15 +192,20 @@ router.delete('/:id', protect, async (req, res) => {
   }
 });
 
-// @desc    Buy a product (reduce stock)
+// @desc    Request to buy a product (submit buyer details to seller)
 // @route   POST /api/products/:id/buy
 // @access  Private
 router.post('/:id/buy', protect, async (req, res) => {
   const productId = req.params.id;
   const quantityToBuy = parseInt(req.body.quantity || 1);
+  const { buyerName, buyerEmail, buyerMobile } = req.body;
 
   if (quantityToBuy <= 0) {
     return res.status(400).json({ message: "Quantity must be greater than zero" });
+  }
+
+  if (!buyerName || !buyerEmail || !buyerMobile) {
+    return res.status(400).json({ message: "Please provide buyer name, email, and mobile number" });
   }
 
   try {
@@ -216,10 +221,21 @@ router.post('/:id/buy', protect, async (req, res) => {
         return res.status(400).json({ message: `Insufficient stock. Only ${product.stock} items left.` });
       }
 
-      product.stock -= quantityToBuy;
+      if (!product.buyRequests) {
+        product.buyRequests = [];
+      }
+
+      product.buyRequests.push({
+        buyerName,
+        buyerEmail,
+        buyerMobile,
+        quantity: quantityToBuy,
+        requestedAt: new Date().toISOString()
+      });
+
       writeMockDb(db);
 
-      return res.json({ message: "Purchase completed successfully!", product });
+      return res.json({ message: "Request sent to seller successfully!", product });
     } else {
       const product = await Product.findById(productId);
 
@@ -231,14 +247,25 @@ router.post('/:id/buy', protect, async (req, res) => {
         return res.status(400).json({ message: `Insufficient stock. Only ${product.stock} items left.` });
       }
 
-      product.stock -= quantityToBuy;
+      if (!product.buyRequests) {
+        product.buyRequests = [];
+      }
+
+      product.buyRequests.push({
+        buyerName,
+        buyerEmail,
+        buyerMobile,
+        quantity: quantityToBuy,
+        requestedAt: new Date()
+      });
+
       const updatedProduct = await product.save();
 
-      return res.json({ message: "Purchase completed successfully!", product: updatedProduct });
+      return res.json({ message: "Request sent to seller successfully!", product: updatedProduct });
     }
   } catch (error) {
-    console.error("Buy Product Error:", error);
-    res.status(500).json({ message: "Server error purchasing product", error: error.message });
+    console.error("Buy Product Request Error:", error);
+    res.status(500).json({ message: "Server error submitting purchase request", error: error.message });
   }
 });
 

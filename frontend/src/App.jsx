@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { TranslationProvider } from './context/TranslationContext';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -48,9 +49,10 @@ const MemberLayout = ({ children }) => {
 export const App = () => {
   return (
     <Router>
-      <AuthProvider>
-        <Routes>
-          {/* Public routes */}
+      <TranslationProvider>
+        <AuthProvider>
+          <Routes>
+            {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -150,8 +152,9 @@ export const App = () => {
 
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AuthProvider>
+         </Routes>
+        </AuthProvider>
+      </TranslationProvider>
     </Router>
   );
 };

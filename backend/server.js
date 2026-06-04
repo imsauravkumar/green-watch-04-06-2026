@@ -14,6 +14,7 @@ import contactRoutes from './routes/contact.js';
 import communityRoutes from './routes/community.js';
 import weatherRoutes from './routes/weather.js';
 import adminRoutes from './routes/admin.js';
+import analysisRoutes from './routes/analysis.js';
 
 // Establish Database Connection
 connectDB();
@@ -45,8 +46,8 @@ app.use(cors({
 app.options('*', cors());
 
 // Set body payload limits to support base64 crop image uploads
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Routes mapping
 app.use('/api/auth', authRoutes);
@@ -56,6 +57,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/weather', weatherRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/analysis', analysisRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

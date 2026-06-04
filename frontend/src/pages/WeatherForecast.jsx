@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../hooks/useTranslation';
+import { apiFetch } from '../api';
 import { 
   CloudSun, 
   Search, 
@@ -29,7 +30,7 @@ export const WeatherForecast = () => {
     setError(null);
     const token = localStorage.getItem('greenwatch_token');
     try {
-      const res = await fetch(`/api/weather?location=${encodeURIComponent(loc)}`, {
+      const res = await apiFetch(`/api/weather?location=${encodeURIComponent(loc)}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

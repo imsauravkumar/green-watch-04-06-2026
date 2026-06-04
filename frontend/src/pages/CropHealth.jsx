@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Camera, Upload, RefreshCw, CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
+import { apiFetch } from '../api';
 
 export const CropHealth = () => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [image, setImage] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
@@ -16,43 +17,32 @@ export const CropHealth = () => {
     reader.readAsDataURL(file);
   };
 
-  const runMockAnalysis = () => {
+  const runAnalysis = async () => {
     if (!image) return;
     setAnalyzing(true);
-    setTimeout(() => {
-      const mockReports = [
-        {
-          disease: "Tomato Early Blight (Alternaria solani)",
-          severity: "Moderate (45%)",
-          symptoms: "Dark, concentric spots (target-like) on older leaves. Surrounding tissue yellowing followed by leaf defoliation.",
-          organic: "Apply copper-based organic fungicide sprays. Remove infected lower leaves immediately to prevent spore splash. Avoid overhead watering.",
-          chemical: "Spray Chlorothalonil or Mancozeb-containing fungicides every 7-10 days until spread ceases."
+    const token = localStorage.getItem('greenwatch_token');
+    try {
+      const res = await apiFetch('/api/analysis/diagnose', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        {
-          disease: "Potato Late Blight (Phytophthora infestans)",
-          severity: "High (80%) - Urgent action needed",
-          symptoms: "Water-soaked dark lesions on leaf tips. White fuzzy growth on leaf undersides in humid conditions. Stems turning black.",
-          organic: "Remove and destroy all infected foliage. Spray copper carbonate or baking soda solutions. Ensure wide spacing for dry air circulation.",
-          chemical: "Apply systemic fungicides containing Metalaxyl or Ridomil Gold to prevent tuber contamination."
-        },
-        {
-          disease: "Powdery Mildew (Podosphaera pannosa)",
-          severity: "Low (20%)",
-          symptoms: "White, powdery flour-like fungal coatings covering leaf surfaces. Leaves curling upwards.",
-          organic: "Spray a mixture of 1 tbsp baking soda + 1 tsp liquid soap in 4L water. Increase sun exposure. Spray neem oil solution.",
-          chemical: "Apply sulphur or Myclobutanil-based systemic mildewcide sprays."
-        },
-        {
-          disease: "Healthy Leaf - No Pathogens Detected",
-          severity: "None (0%)",
-          symptoms: "Foliage exhibits rich chlorophyll levels. Stomatal cells and veins show uniform structures.",
-          organic: "Maintain regular nitrogen-rich compost dressings. Keep mulch moisture levels checked.",
-          chemical: "No chemical fungicides or interventions needed."
-        }
-      ];
-      setResult(mockReports[Math.floor(Math.random() * mockReports.length)]);
+        body: JSON.stringify({ image, locale })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setResult(data);
+      } else {
+        const errData = await res.json();
+        alert(errData.message || "Failed to analyze crop leaf");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error diagnosing leaf");
+    } finally {
       setAnalyzing(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -76,7 +66,7 @@ export const CropHealth = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  onClick={runMockAnalysis}
+                  onClick={runAnalysis}
                   disabled={analyzing}
                   className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                 >

@@ -9,10 +9,12 @@ import {
   ChevronRight, 
   AlertCircle 
 } from 'lucide-react';
+import { useTranslation } from '../hooks/useTranslation';
 import { apiFetch } from '../api';
 
 export const Community = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -139,9 +141,9 @@ export const Community = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-            <Users className="w-5 h-5 text-emerald-600" /> Farmer Community
+            <Users className="w-5 h-5 text-emerald-600" /> {t('farmerCommunity')}
           </h1>
-          <p className="text-xs text-slate-500">Share tips, ask questions, and consult with experienced agricultural peers</p>
+          <p className="text-xs text-slate-500">{t('shareTipsDesc')}</p>
         </div>
 
         {/* Add Post Trigger button */}
@@ -149,14 +151,14 @@ export const Community = () => {
           onClick={() => setShowAddForm(!showAddForm)}
           className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm self-start sm:self-auto"
         >
-          <Plus className="w-4 h-4" /> {showAddForm ? "Cancel Post" : "Ask a Question"}
+          <Plus className="w-4 h-4" /> {showAddForm ? t('cancelPost') : t('askQuestionBtn')}
         </button>
       </div>
 
       {/* New Post Form Panel */}
       {showAddForm && (
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm max-w-xl text-left">
-          <h3 className="font-bold text-slate-900 text-sm mb-4">Post to Community Forum</h3>
+          <h3 className="font-bold text-slate-900 text-sm mb-4">{t('postCommunityForum')}</h3>
           
           {error && (
             <div className="p-3 bg-red-50 text-red-800 text-xs font-semibold rounded-lg flex items-center gap-2 mb-4">
@@ -167,11 +169,11 @@ export const Community = () => {
 
           <form onSubmit={handleCreatePost} className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Thread Title *</label>
+              <label className="text-xs font-semibold text-slate-700 block mb-1">{t('threadTitleLabel')}</label>
               <input
                 type="text"
                 required
-                placeholder="E.g. What organic solution works for Yellow Rust in wheat?"
+                placeholder={t('rustQuestionPlaceholder')}
                 value={newPost.title}
                 onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
                 className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -180,26 +182,26 @@ export const Community = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Category *</label>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">{t('categoryLabel')}</label>
                 <select
                   value={newPost.category}
                   onChange={(e) => setNewPost(prev => ({ ...prev, category: e.target.value }))}
                   className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
-                  <option value="General">General farming tips</option>
-                  <option value="Diseases">Crop Diseases</option>
-                  <option value="Pests">Pests & Controls</option>
-                  <option value="Market">Market & Pricing</option>
+                  <option value="General">{t('generalTipsOption')}</option>
+                  <option value="Diseases">{t('cropDiseasesOption')}</option>
+                  <option value="Pests">{t('pestsControlsOption')}</option>
+                  <option value="Market">{t('marketPricingOption')}</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Detailed Description *</label>
+              <label className="text-xs font-semibold text-slate-700 block mb-1">{t('detailedDescLabel')}</label>
               <textarea
                 required
                 rows={4}
-                placeholder="Describe your soil, crop age, and what remedies you have already tried..."
+                placeholder={t('communityFormDescPlaceholder')}
                 value={newPost.content}
                 onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
                 className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
@@ -210,7 +212,7 @@ export const Community = () => {
               type="submit"
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 rounded-lg transition-colors"
             >
-              Publish Thread
+              {t('publishThreadBtn')}
             </button>
           </form>
         </div>
@@ -222,7 +224,7 @@ export const Community = () => {
         {/* Left Side: Category Filters list */}
         <div className="lg:col-span-1 space-y-3">
           <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-3">Categories</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-3">{t('categoriesTitle')}</span>
             <div className="space-y-1">
               {['All', 'General', 'Diseases', 'Pests', 'Market'].map((cat) => (
                 <button
@@ -230,7 +232,7 @@ export const Community = () => {
                   onClick={() => setActiveCategory(cat)}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${activeCategory === cat ? 'bg-emerald-50 text-emerald-800' : 'text-slate-600 hover:bg-slate-50'}`}
                 >
-                  <span>{cat}</span>
+                  <span>{cat === 'All' ? t('allOption') : cat === 'General' ? t('generalOption') : cat === 'Diseases' ? t('diseasesOption') : cat === 'Pests' ? t('pestsOption') : cat === 'Market' ? t('marketOption') : cat}</span>
                   <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
                 </button>
               ))}
@@ -243,11 +245,11 @@ export const Community = () => {
           {loading ? (
             <div className="py-20 bg-white border border-slate-200 rounded-xl flex flex-col items-center justify-center gap-3">
               <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-200 border-t-emerald-600" />
-              <span className="text-xs text-slate-400">Loading discussion threads...</span>
+              <span className="text-xs text-slate-400">{t('loadingDiscussion')}</span>
             </div>
           ) : filteredPosts.length === 0 ? (
             <div className="py-20 bg-white border border-slate-200 rounded-xl text-center text-slate-400 text-xs">
-              No discussions found in this category. Be the first to post!
+              {t('noDiscussionCategory')}
             </div>
           ) : (
             filteredPosts.map((post) => {
@@ -262,9 +264,16 @@ export const Community = () => {
                     <div>
                       <h3 className="font-bold text-slate-900 text-sm leading-snug">{post.title}</h3>
                       <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[9px] text-slate-400 font-bold uppercase">
-                        <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{post.category}</span>
+                        <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                          {post.category === 'General' ? t('generalOption') : post.category === 'Diseases' ? t('diseasesOption') : post.category === 'Pests' ? t('pestsOption') : post.category === 'Market' ? t('marketOption') : post.category}
+                        </span>
                         <span>•</span>
-                        <span>By {post.authorName} ({post.authorRole})</span>
+                        <span>
+                          {t('postedByLabel')
+                            .replace('{author}', post.authorName)
+                            .replace('{role}', post.authorRole === 'Farmer' ? t('roleFarmer') : post.authorRole === 'Seller' ? t('roleSeller') : post.authorRole === 'Admin' ? t('admin') : post.authorRole)
+                          }
+                        </span>
                         <span>•</span>
                         <span>{new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                       </div>
@@ -281,11 +290,11 @@ export const Community = () => {
                       className={`flex items-center gap-1.5 font-bold transition-colors ${hasLiked ? 'text-emerald-600' : 'hover:text-slate-800'}`}
                     >
                       <ThumbsUp className="w-4 h-4 shrink-0" />
-                      <span>{post.likes?.length || 0} Likes</span>
+                      <span>{post.likes?.length || 0} {t('likesCount')}</span>
                     </button>
                     <div className="flex items-center gap-1.5 font-bold">
                       <MessageSquare className="w-4 h-4 shrink-0" />
-                      <span>{post.comments?.length || 0} Comments</span>
+                      <span>{post.comments?.length || 0} {t('commentsCount')}</span>
                     </div>
                   </div>
 
@@ -295,7 +304,9 @@ export const Community = () => {
                       {post.comments.map((cmt, cIdx) => (
                         <div key={cIdx} className="text-xs text-slate-600 border-b border-slate-200/50 pb-2.5 last:border-0 last:pb-0 space-y-1">
                           <div className="flex justify-between items-center text-[9px] font-bold uppercase text-slate-400">
-                            <span>{cmt.authorName} ({cmt.authorRole})</span>
+                            <span>
+                              {cmt.authorName} ({cmt.authorRole === 'Farmer' ? t('roleFarmer') : cmt.authorRole === 'Seller' ? t('roleSeller') : cmt.authorRole === 'Admin' ? t('admin') : cmt.authorRole})
+                            </span>
                             <span>{new Date(cmt.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                           </div>
                           <p className="leading-relaxed font-semibold">{cmt.content}</p>
@@ -311,7 +322,7 @@ export const Community = () => {
                   >
                     <input
                       type="text"
-                      placeholder="Write your agricultural advice/reply..."
+                      placeholder={t('writeAdviceReply')}
                       value={commentsMap[post.id || post._id] || ''}
                       onChange={(e) => handleCommentTextChange(post.id || post._id, e.target.value)}
                       className="flex-1 text-xs px-3.5 py-2 border border-slate-250 bg-slate-50/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white"

@@ -1,7 +1,7 @@
 // Utility to get the correct API base URL
 // In production (Vercel), VITE_API_URL points to Railway backend
 // In development, Vite proxy handles /api -> localhost:5000
-export const API_BASE = import.meta.env.VITE_API_URL || '';
+export const API_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || '');
 
 /**
  * Makes an authenticated fetch request.

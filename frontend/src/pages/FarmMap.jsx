@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { MapPin, RefreshCw, Trash2, Sprout, ShieldCheck } from 'lucide-react';
+import { useTranslation } from '../hooks/useTranslation';
 
 export const FarmMap = () => {
+  const { t } = useTranslation();
   const [points, setPoints] = useState([]);
   const [fields, setFields] = useState([
-    { name: "North Wheat Field", area: "1.4 Acres", crop: "Wheat", color: "rgba(16, 185, 129, 0.4)", border: "#10b981" },
-    { name: "West Paddy Field", area: "0.9 Acres", crop: "Paddy", color: "rgba(59, 130, 246, 0.4)", border: "#3b82f6" }
+    { name: "defaultField1", area: "1.4", crop: "Wheat", color: "rgba(16, 185, 129, 0.4)", border: "#10b981", isDefault: true },
+    { name: "defaultField2", area: "0.9", crop: "Paddy", color: "rgba(59, 130, 246, 0.4)", border: "#3b82f6", isDefault: true }
   ]);
   const [activeFieldName, setActiveFieldName] = useState('New Field');
   const [activeCrop, setActiveCrop] = useState('Wheat');
@@ -31,7 +33,7 @@ export const FarmMap = () => {
   const handleSaveField = () => {
     if (points.length < 3) return;
 
-    // Simple robust area calculation mock based on bounding box
+    // Simple area calculation mock based on bounding box
     const xs = points.map(p => p.x);
     const ys = points.map(p => p.y);
     const minX = Math.min(...xs);
@@ -52,10 +54,11 @@ export const FarmMap = () => {
     const newFieldObj = {
       name: activeFieldName,
       crop: activeCrop,
-      area: `${calculatedArea} Acres`,
+      area: `${calculatedArea} ${t('acres')}`,
       points: [...points],
       color: style.color,
-      border: style.border
+      border: style.border,
+      isDefault: false
     };
 
     setFields([...fields, newFieldObj]);
@@ -73,9 +76,9 @@ export const FarmMap = () => {
       {/* Title */}
       <div>
         <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-          <MapPin className="w-5 h-5 text-emerald-600" /> GPS Farm Mapping
+          <MapPin className="w-5 h-5 text-emerald-600" /> {t('farmMapTitle')}
         </h1>
-        <p className="text-xs text-slate-500">Draw farm coordinates, outline fence boundaries, and track crop zones</p>
+        <p className="text-xs text-slate-500">{t('farmMapDesc')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -84,7 +87,7 @@ export const FarmMap = () => {
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-              Satellite Field Canvas (Click to plot corner pins, minimum 3 points)
+              {t('satelliteCanvas')}
             </span>
             
             {/* Satellite mock canvas */}
@@ -107,6 +110,8 @@ export const FarmMap = () => {
                 {fields.map((f, fIdx) => {
                   if (!f.points) return null;
                   const pointsStr = f.points.map(p => `${p.x},${p.y}`).join(' ');
+                  const fieldName = f.isDefault ? t(f.name) : f.name;
+                  const fieldArea = f.isDefault ? `${f.area} ${t('acres')}` : f.area;
                   return (
                     <g key={fIdx}>
                       <polygon 
@@ -126,7 +131,7 @@ export const FarmMap = () => {
                         className="bg-black/80 px-1"
                         style={{ textShadow: '1px 1px 2px black' }}
                       >
-                        {f.name} ({f.area})
+                        {fieldName} ({fieldArea})
                       </text>
                     </g>
                   );
@@ -170,7 +175,7 @@ export const FarmMap = () => {
             {/* Drawing controls */}
             <div className="flex justify-between items-center mt-3">
               <span className="text-[10px] text-slate-500 font-semibold">
-                Plotted: {points.length}/10 Boundary Nodes
+                {t('plottedNodes').replace('{count}', points.length)}
               </span>
               <div className="flex gap-2">
                 <button
@@ -178,7 +183,7 @@ export const FarmMap = () => {
                   disabled={points.length === 0}
                   className="text-xs font-semibold px-3 py-1.5 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50"
                 >
-                  Reset Pins
+                  {t('resetPins')}
                 </button>
               </div>
             </div>
@@ -190,11 +195,11 @@ export const FarmMap = () => {
           
           {/* New field tag configuration */}
           <div className="space-y-4">
-            <h2 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Tag Field Outline</h2>
+            <h2 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">{t('tagFieldOutline')}</h2>
             
             <div className="space-y-3 text-left">
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Field Label Name</label>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">{t('fieldLabelName')}</label>
                 <input 
                   type="text"
                   value={activeFieldName}
@@ -204,16 +209,16 @@ export const FarmMap = () => {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Sown Crop Variety</label>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">{t('sownCropVariety')}</label>
                 <select
                   value={activeCrop}
                   onChange={(e) => setActiveCrop(e.target.value)}
                   className="w-full text-xs px-3.5 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
-                  <option value="Wheat">Wheat Crop</option>
-                  <option value="Paddy">Paddy / Rice Crop</option>
-                  <option value="Cotton">Cotton Crop</option>
-                  <option value="Fallow">Fallow Land / Empty</option>
+                  <option value="Wheat">{t('wheatCropOption')}</option>
+                  <option value="Paddy">{t('paddyCropOption')}</option>
+                  <option value="Cotton">{t('cottonCropOption')}</option>
+                  <option value="Fallow">{t('fallowLandOption')}</option>
                 </select>
               </div>
 
@@ -222,36 +227,41 @@ export const FarmMap = () => {
                 disabled={points.length < 3}
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 shadow-sm"
               >
-                <ShieldCheck className="w-4 h-4" /> Save Crop Zone
+                <ShieldCheck className="w-4 h-4" /> {t('saveCropZone')}
               </button>
             </div>
           </div>
 
           {/* List of saved zones */}
           <div className="space-y-3 flex-1 flex flex-col">
-            <h2 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Registered Crop Zones</h2>
+            <h2 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">{t('registeredCropZones')}</h2>
             
             <div className="space-y-2 overflow-y-auto max-h-[220px] flex-1">
               {fields.length === 0 ? (
-                <div className="text-center py-6 text-slate-400 text-xs">No saved farm mapping coordinates.</div>
+                <div className="text-center py-6 text-slate-400 text-xs">{t('noSavedCoordinates')}</div>
               ) : (
-                fields.map((f, idx) => (
-                  <div 
-                    key={idx}
-                    className="border border-slate-150 rounded-lg p-3 flex justify-between items-center hover:bg-slate-50 transition-colors"
-                  >
-                    <div>
-                      <span className="font-bold text-slate-800 text-xs block">{f.name}</span>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase block mt-0.5">{f.crop} • {f.area}</span>
-                    </div>
-                    <button
-                      onClick={() => handleDeleteField(idx)}
-                      className="text-red-500 hover:bg-red-50 p-1.5 rounded hover:text-red-700 transition-colors"
+                fields.map((f, idx) => {
+                  const name = f.isDefault ? t(f.name) : f.name;
+                  const area = f.isDefault ? `${f.area} ${t('acres')}` : f.area;
+                  const cropTransKey = f.crop === 'Wheat' ? 'wheatCropOption' : f.crop === 'Paddy' ? 'paddyCropOption' : f.crop === 'Cotton' ? 'cottonCropOption' : 'fallowLandOption';
+                  return (
+                    <div 
+                      key={idx}
+                      className="border border-slate-150 rounded-lg p-3 flex justify-between items-center hover:bg-slate-50 transition-colors"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))
+                      <div>
+                        <span className="font-bold text-slate-800 text-xs block">{name}</span>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase block mt-0.5">{t(cropTransKey)} • {area}</span>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteField(idx)}
+                        className="text-red-500 hover:bg-red-50 p-1.5 rounded hover:text-red-700 transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
@@ -263,4 +273,5 @@ export const FarmMap = () => {
     </div>
   );
 };
+
 export default FarmMap;

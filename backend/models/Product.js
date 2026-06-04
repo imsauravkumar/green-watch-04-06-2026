@@ -32,6 +32,15 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  buyRequests: [
+    {
+      buyerName: { type: String, required: true },
+      buyerEmail: { type: String, required: true },
+      buyerMobile: { type: String, required: true },
+      quantity: { type: Number, required: true, default: 1 },
+      requestedAt: { type: Date, default: Date.now }
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now

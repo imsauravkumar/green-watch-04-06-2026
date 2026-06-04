@@ -69,6 +69,8 @@ class FirebaseAuthWrapper {
                 const data = await syncRes.json();
                 this.currentUser = {
                   uid: fbUser.uid,
+                  id: data._id || data.id,
+                  _id: data._id || data.id,
                   email: fbUser.email,
                   displayName: data.name,
                   photoURL: data.profilePhoto,
@@ -139,6 +141,8 @@ class FirebaseAuthWrapper {
 
         this.currentUser = {
           uid: fbUser.uid,
+          id: data._id || data.id,
+          _id: data._id || data.id,
           email: fbUser.email,
           displayName: data.name,
           photoURL: data.profilePhoto,
@@ -213,6 +217,8 @@ class FirebaseAuthWrapper {
 
         this.currentUser = {
           uid: fbUser.uid,
+          id: data._id || data.id,
+          _id: data._id || data.id,
           email: fbUser.email,
           displayName: name,
           photoURL: data.profilePhoto,

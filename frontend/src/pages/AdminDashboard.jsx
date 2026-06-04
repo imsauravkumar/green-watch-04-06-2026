@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../hooks/useTranslation';
+import { apiFetch } from '../api';
 import { 
   Users, 
   Store, 
@@ -16,6 +18,7 @@ import {
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   
   const [activeTab, setActiveTab] = useState('users'); // 'users' | 'products' | 'messages' | 'broadcast'
   
@@ -44,13 +47,13 @@ export const AdminDashboard = () => {
 
     try {
       if (activeTab === 'users') {
-        const res = await fetch('/api/users', { headers: { 'Authorization': `Bearer ${token}` } });
+        const res = await apiFetch('/api/users', { headers: { 'Authorization': `Bearer ${token}` } });
         if (res.ok) setUsers(await res.json());
       } else if (activeTab === 'products') {
-        const res = await fetch('/api/products', { headers: { 'Authorization': `Bearer ${token}` } });
+        const res = await apiFetch('/api/products', { headers: { 'Authorization': `Bearer ${token}` } });
         if (res.ok) setProducts(await res.json());
       } else if (activeTab === 'messages') {
-        const res = await fetch('/api/contact', { headers: { 'Authorization': `Bearer ${token}` } });
+        const res = await apiFetch('/api/contact', { headers: { 'Authorization': `Bearer ${token}` } });
         if (res.ok) setMessages(await res.json());
       }
     } catch (err) {
@@ -65,7 +68,7 @@ export const AdminDashboard = () => {
     const token = localStorage.getItem('greenwatch_token');
 
     try {
-      const res = await fetch(`/api/users/${userId}`, {
+      const res = await apiFetch(`/api/users/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -86,7 +89,7 @@ export const AdminDashboard = () => {
     const token = localStorage.getItem('greenwatch_token');
 
     try {
-      const res = await fetch(`/api/products/${productId}`, {
+      const res = await apiFetch(`/api/products/${productId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -109,7 +112,7 @@ export const AdminDashboard = () => {
     const token = localStorage.getItem('greenwatch_token');
 
     try {
-      const res = await fetch('/api/admin/notifications', {
+      const res = await apiFetch('/api/admin/notifications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -150,9 +153,9 @@ export const AdminDashboard = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-            <ShieldAlert className="w-5 h-5 text-emerald-600" /> Admin Console
+            <ShieldAlert className="w-5 h-5 text-emerald-600" /> {t('adminTitle')}
           </h1>
-          <p className="text-xs text-slate-500">System maintenance, catalog controls, and user directory audit</p>
+          <p className="text-xs text-slate-500">{t('systemMaintenanceDesc')}</p>
         </div>
 
         {/* Tab switchers */}
@@ -161,25 +164,25 @@ export const AdminDashboard = () => {
             onClick={() => { setActiveTab('users'); setSearchQuery(''); }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'users' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}
           >
-            <Users className="w-3.5 h-3.5" /> Users
+            <Users className="w-3.5 h-3.5" /> {t('tabUsers')}
           </button>
           <button
             onClick={() => { setActiveTab('products'); setSearchQuery(''); }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'products' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}
           >
-            <Store className="w-3.5 h-3.5" /> Products
+            <Store className="w-3.5 h-3.5" /> {t('tabProducts')}
           </button>
           <button
             onClick={() => { setActiveTab('messages'); setSearchQuery(''); }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'messages' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}
           >
-            <Mail className="w-3.5 h-3.5" /> Contact Inbox
+            <Mail className="w-3.5 h-3.5" /> {t('tabContactInbox')}
           </button>
           <button
             onClick={() => { setActiveTab('broadcast'); setSearchQuery(''); }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'broadcast' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}
           >
-            <Megaphone className="w-3.5 h-3.5" /> Broadcasts
+            <Megaphone className="w-3.5 h-3.5" /> {t('tabBroadcasts')}
           </button>
         </div>
       </div>
@@ -202,7 +205,7 @@ export const AdminDashboard = () => {
               <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <input
                 type="text"
-                placeholder={`Filter ${activeTab}...`}
+                placeholder={t('filterPlaceholder').replace('{tab}', activeTab === 'users' ? t('tabUsers') : activeTab === 'products' ? t('tabProducts') : activeTab)}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full text-xs pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -214,7 +217,7 @@ export const AdminDashboard = () => {
         {loading ? (
           <div className="py-20 flex flex-col items-center justify-center gap-3">
             <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-200 border-t-emerald-600" />
-            <span className="text-xs text-slate-400">Loading catalog data...</span>
+            <span className="text-xs text-slate-400">{t('loadingCatalogData')}</span>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -224,17 +227,17 @@ export const AdminDashboard = () => {
               <table className="w-full text-xs text-slate-600">
                 <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-[9px] font-bold">
                   <tr>
-                    <th className="px-6 py-3.5 text-left">User Name</th>
-                    <th className="px-6 py-3.5 text-left">Email Address</th>
-                    <th className="px-6 py-3.5 text-left">Assigned Role</th>
-                    <th className="px-6 py-3.5 text-left">Location</th>
-                    <th className="px-6 py-3.5 text-center">Actions</th>
+                    <th className="px-6 py-3.5 text-left">{t('colUserName')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colEmailAddr')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colAssignedRole')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colLocation')}</th>
+                    <th className="px-6 py-3.5 text-center">{t('colActions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium">
                   {filteredUsers.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-8 text-slate-400">No users found match filter.</td>
+                      <td colSpan={5} className="text-center py-8 text-slate-400">{t('noUsersFoundFilter')}</td>
                     </tr>
                   ) : (
                     filteredUsers.map((u) => (
@@ -246,7 +249,7 @@ export const AdminDashboard = () => {
                         <td className="px-6 py-3.5 text-slate-500">{u.email}</td>
                         <td className="px-6 py-3.5">
                           <span className={`inline-flex px-2 py-0.5 rounded text-[9px] font-semibold uppercase ${u.role === 'admin' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' : u.role === 'both' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'}`}>
-                            {u.role}
+                            {u.role === 'admin' ? t('admin') : u.role === 'farmer' ? t('roleFarmer') : u.role === 'seller' ? t('roleSeller') : u.role === 'both' ? t('roleBoth') : u.role}
                           </span>
                         </td>
                         <td className="px-6 py-3.5 text-slate-500">{u.location}</td>
@@ -273,17 +276,17 @@ export const AdminDashboard = () => {
               <table className="w-full text-xs text-slate-600">
                 <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-[9px] font-bold">
                   <tr>
-                    <th className="px-6 py-3.5 text-left">Product</th>
-                    <th className="px-6 py-3.5 text-left">Listed By Seller</th>
-                    <th className="px-6 py-3.5 text-left">Price</th>
-                    <th className="px-6 py-3.5 text-left">Stock Quantity</th>
-                    <th className="px-6 py-3.5 text-center">Actions</th>
+                    <th className="px-6 py-3.5 text-left">{t('colProduct')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colListedBySeller')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colPrice')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colStockQty')}</th>
+                    <th className="px-6 py-3.5 text-center">{t('colActions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium">
                   {filteredProducts.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-8 text-slate-400">No products found match filter.</td>
+                      <td colSpan={5} className="text-center py-8 text-slate-400">{t('noProductsFoundFilter')}</td>
                     </tr>
                   ) : (
                     filteredProducts.map((p) => (
@@ -301,7 +304,7 @@ export const AdminDashboard = () => {
                         <td className="px-6 py-3.5 font-bold text-slate-900">₹{p.price}</td>
                         <td className="px-6 py-3.5">
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${p.stock === 0 ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-700'}`}>
-                            {p.stock} units
+                            {p.stock} {t('unitsLabel')}
                           </span>
                         </td>
                         <td className="px-6 py-3.5 text-center">
@@ -325,16 +328,16 @@ export const AdminDashboard = () => {
               <table className="w-full text-xs text-slate-600">
                 <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-[9px] font-bold">
                   <tr>
-                    <th className="px-6 py-3.5 text-left">Sender Details</th>
-                    <th className="px-6 py-3.5 text-left">Subject</th>
-                    <th className="px-6 py-3.5 text-left">Message Description</th>
-                    <th className="px-6 py-3.5 text-left">Received Date</th>
+                    <th className="px-6 py-3.5 text-left">{t('colSenderDetails')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colSubject')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colMsgDesc')}</th>
+                    <th className="px-6 py-3.5 text-left">{t('colReceivedDate')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium">
                   {messages.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="text-center py-8 text-slate-400">No contact messages received.</td>
+                      <td colSpan={4} className="text-center py-8 text-slate-400">{t('noContactMsgs')}</td>
                     </tr>
                   ) : (
                     messages.map((m) => (
@@ -361,18 +364,18 @@ export const AdminDashboard = () => {
                 <div className="border-b border-slate-100 pb-3 flex items-center gap-1.5">
                   <Megaphone className="w-5 h-5 text-emerald-600" />
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm">Targeted Notifications console</h3>
-                    <p className="text-[10px] text-slate-400">Dispatches warnings and messages direct to user groups</p>
+                    <h3 className="font-bold text-slate-900 text-sm">{t('targetedNotificationsConsole')}</h3>
+                    <p className="text-[10px] text-slate-400">{t('dispatchesWarnings')}</p>
                   </div>
                 </div>
 
                 <form onSubmit={handleSendBroadcast} className="space-y-4">
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 block mb-1">Alert Title</label>
+                    <label className="text-xs font-semibold text-slate-700 block mb-1">{t('alertTitleLabel')}</label>
                     <input
                       type="text"
                       required
-                      placeholder="E.g. Extreme Cold Warning or Seed Availability update"
+                      placeholder={t('alertPlaceholder')}
                       value={broadcast.title}
                       onChange={(e) => setBroadcast(prev => ({ ...prev, title: e.target.value }))}
                       className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -380,24 +383,24 @@ export const AdminDashboard = () => {
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 block mb-1">Target Recipient Group</label>
+                    <label className="text-xs font-semibold text-slate-700 block mb-1">{t('targetRecipientGroup')}</label>
                     <select
                       value={broadcast.targetGroup}
                       onChange={(e) => setBroadcast(prev => ({ ...prev, targetGroup: e.target.value }))}
                       className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
-                      <option value="both">Both (All Users)</option>
-                      <option value="farmer">Farmers Only</option>
-                      <option value="seller">Sellers Only</option>
+                      <option value="both">{t('bothAllUsers')}</option>
+                      <option value="farmer">{t('farmersOnly')}</option>
+                      <option value="seller">{t('sellersOnly')}</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 block mb-1">Alert Details / Body Message</label>
+                    <label className="text-xs font-semibold text-slate-700 block mb-1">{t('alertDetailsBody')}</label>
                     <textarea
                       required
                       rows={5}
-                      placeholder="Write your broadcast announcement details..."
+                      placeholder={t('broadcastAnnouncementPlaceholder')}
                       value={broadcast.message}
                       onChange={(e) => setBroadcast(prev => ({ ...prev, message: e.target.value }))}
                       className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
@@ -410,7 +413,7 @@ export const AdminDashboard = () => {
                     className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>{sendingBroadcast ? "Sending Broadcast..." : "Dispatch Broadcast"}</span>
+                    <span>{sendingBroadcast ? t('sendingBroadcastBtn') : t('dispatchBroadcastBtn')}</span>
                   </button>
                 </form>
               </div>

@@ -12,6 +12,7 @@ export const Navbar = ({ onToggleSidebar }) => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [hasUnseen, setHasUnseen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -28,9 +29,41 @@ export const Navbar = ({ onToggleSidebar }) => {
       if (res.ok) {
         const data = await res.json();
         setNotifications(data);
+        
+        // Check for unseen notifications
+        const userId = user?.uid || user?._id || user?.id || 'default';
+        const seenKey = `greenwatch_seen_notifications_${userId}`;
+        let seenIds = [];
+        try {
+          seenIds = JSON.parse(localStorage.getItem(seenKey)) || [];
+        } catch (e) {
+          seenIds = [];
+        }
+        const hasUnseenNotifs = data.some(n => !seenIds.includes(n.id || n._id));
+        setHasUnseen(hasUnseenNotifs);
       }
     } catch (err) {
       console.error("Error fetching notifications", err);
+    }
+  };
+
+  const toggleNotifications = () => {
+    const nextShow = !showNotifications;
+    setShowNotifications(nextShow);
+    setShowLangMenu(false);
+    
+    if (nextShow && notifications.length > 0) {
+      const userId = user?.uid || user?._id || user?.id || 'default';
+      const seenKey = `greenwatch_seen_notifications_${userId}`;
+      let seenIds = [];
+      try {
+        seenIds = JSON.parse(localStorage.getItem(seenKey)) || [];
+      } catch (e) {
+        seenIds = [];
+      }
+      const updatedSeenIds = [...new Set([...seenIds, ...notifications.map(n => n.id || n._id)])];
+      localStorage.setItem(seenKey, JSON.stringify(updatedSeenIds));
+      setHasUnseen(false);
     }
   };
 
@@ -124,16 +157,13 @@ export const Navbar = ({ onToggleSidebar }) => {
           {user && (
             <div className="relative">
               <button
-                onClick={() => {
-                  setShowNotifications(!showNotifications);
-                  setShowLangMenu(false);
-                }}
+                onClick={toggleNotifications}
                 className="relative text-slate-700 hover:text-slate-900 hover:bg-slate-100 p-2 rounded-md transition-colors"
                 title="System Notifications"
               >
                 <Bell className="h-4 w-4" />
-                {notifications.length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex h-2 w-2 rounded-full bg-emerald-600" />
+                {hasUnseen && (
+                  <span className="absolute top-1.5 right-1.5 flex h-2 w-2 rounded-full bg-red-500 animate-pulse" />
                 )}
               </button>
 

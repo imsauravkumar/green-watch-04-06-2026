@@ -1,4 +1,6 @@
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
 import { protect, adminOnly } from '../middleware/auth.js';
 import { isMockDb, getMockDb, writeMockDb } from '../config/db.js';
 import User from '../models/User.js';
@@ -131,6 +133,66 @@ router.get('/stats', protect, adminOnly, async (req, res) => {
   } catch (error) {
     console.error("Fetch Stats Error:", error);
     res.status(500).json({ message: "Server error fetching system stats", error: error.message });
+  }
+});
+
+// @desc    Get Gemini API key status (masked for security)
+// @route   GET /api/admin/settings/gemini
+// @access  Private/Admin
+router.get('/settings/gemini', protect, adminOnly, async (req, res) => {
+  try {
+    const apiKey = process.env.GEMINI_API_KEY || '';
+    if (!apiKey) {
+      return res.json({ isSet: false, keyMasked: '' });
+    }
+    
+    // Mask the key
+    const masked = apiKey.length > 8 
+      ? apiKey.slice(0, 4) + '...' + apiKey.slice(-4)
+      : 'Present';
+      
+    return res.json({ isSet: true, keyMasked: masked });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching Gemini configuration", error: error.message });
+  }
+});
+
+// @desc    Update Gemini API key in .env
+// @route   POST /api/admin/settings/gemini
+// @access  Private/Admin
+router.post('/settings/gemini', protect, adminOnly, async (req, res) => {
+  const { apiKey } = req.body;
+  if (apiKey === undefined) {
+    return res.status(400).json({ message: "API key is required" });
+  }
+
+  try {
+    const envPath = path.resolve(process.cwd(), '.env');
+    let envContent = '';
+    
+    if (fs.existsSync(envPath)) {
+      envContent = fs.readFileSync(envPath, 'utf8');
+    }
+
+    const keyLine = `GEMINI_API_KEY=${apiKey.trim()}`;
+    
+    if (envContent.includes('GEMINI_API_KEY=')) {
+      // Replace existing line
+      envContent = envContent.replace(/^GEMINI_API_KEY=.*$/m, keyLine);
+    } else {
+      // Append new line
+      envContent = envContent.trim() + `\n${keyLine}\n`;
+    }
+
+    fs.writeFileSync(envPath, envContent, 'utf8');
+    
+    // Update process.env in-memory immediately
+    process.env.GEMINI_API_KEY = apiKey.trim();
+
+    return res.json({ message: "Gemini API key updated successfully in .env and applied in-memory!" });
+  } catch (error) {
+    console.error("Update Gemini Key Error:", error);
+    res.status(500).json({ message: "Failed to update Gemini API key", error: error.message });
   }
 });
 
