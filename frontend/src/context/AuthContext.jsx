@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { apiFetch } from '../api';
 import auth from '../firebase';
 
 const AuthContext = createContext(null);
@@ -67,7 +68,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('greenwatch_token');
     
     // Call backend API to persist details
-    const res = await fetch('/api/users/profile', {
+    const res = await apiFetch('/api/users/profile', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

@@ -19,6 +19,7 @@ import {
   CloudRain
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { apiFetch } from '../api';
 
 export const Dashboard = () => {
   const { user, isFarmer, isSeller } = useAuth();
@@ -40,7 +41,7 @@ export const Dashboard = () => {
       setLoadingWeather(true);
       const token = localStorage.getItem('greenwatch_token');
       const locationQuery = encodeURIComponent(user.location || "New Delhi, India");
-      const res = await fetch(`/api/weather?location=${locationQuery}`, {
+      const res = await apiFetch(`/api/weather?location=${locationQuery}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -57,7 +58,7 @@ export const Dashboard = () => {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem('greenwatch_token');
-      const res = await fetch('/api/admin/notifications', {
+      const res = await apiFetch('/api/admin/notifications', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

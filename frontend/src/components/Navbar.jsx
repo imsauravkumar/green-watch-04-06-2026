@@ -4,6 +4,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { Bell, Globe, Sparkles, User as UserIcon, Menu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.jpg';
+import { apiFetch } from '../api';
 
 export const Navbar = ({ onToggleSidebar }) => {
   const { user, isAdmin } = useAuth();
@@ -21,7 +22,7 @@ export const Navbar = ({ onToggleSidebar }) => {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem('greenwatch_token');
-      const res = await fetch('/api/admin/notifications', {
+      const res = await apiFetch('/api/admin/notifications', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

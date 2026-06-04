@@ -1,5 +1,6 @@
 // Real Firebase client initialization and authentication controller
 import { initializeApp } from 'firebase/app';
+import { apiFetch } from './api';
 import { 
   getAuth, 
   signInWithEmailAndPassword as fbSignIn,
@@ -56,7 +57,7 @@ class FirebaseAuthWrapper {
           const token = localStorage.getItem('greenwatch_token');
           if (!this.currentUser || this.currentUser.email !== fbUser.email || !token) {
             try {
-              const syncRes = await fetch('/api/auth/sync-firebase', {
+              const syncRes = await apiFetch('/api/auth/sync-firebase', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -124,7 +125,7 @@ class FirebaseAuthWrapper {
         const fbUser = userCredential.user;
 
         // Sync and retrieve MongoDB profile and token
-        const res = await fetch('/api/auth/sync-firebase', {
+        const res = await apiFetch('/api/auth/sync-firebase', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -157,7 +158,7 @@ class FirebaseAuthWrapper {
     } else {
       // Mock Fallback
       console.log(`[Mock Firebase Auth] Authenticating user: ${email}`);
-      const res = await fetch('/api/auth/login', {
+      const res = await apiFetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -194,7 +195,7 @@ class FirebaseAuthWrapper {
         await fbUpdateProfile(fbUser, { displayName: name });
 
         // Store other profile parameters (roles, locations) in MongoDB
-        const res = await fetch('/api/auth/sync-firebase', {
+        const res = await apiFetch('/api/auth/sync-firebase', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -231,7 +232,7 @@ class FirebaseAuthWrapper {
     } else {
       // Mock Fallback
       console.log(`[Mock Firebase Auth] Registering user: ${email}`);
-      const res = await fetch('/api/auth/register', {
+      const res = await apiFetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name, role, location })

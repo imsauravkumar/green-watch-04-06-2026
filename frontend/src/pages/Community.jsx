@@ -9,6 +9,7 @@ import {
   ChevronRight, 
   AlertCircle 
 } from 'lucide-react';
+import { apiFetch } from '../api';
 
 export const Community = () => {
   const { user } = useAuth();
@@ -33,7 +34,7 @@ export const Community = () => {
     setLoading(true);
     const token = localStorage.getItem('greenwatch_token');
     try {
-      const res = await fetch('/api/community', {
+      const res = await apiFetch('/api/community', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -52,7 +53,7 @@ export const Community = () => {
     const token = localStorage.getItem('greenwatch_token');
 
     try {
-      const res = await fetch('/api/community', {
+      const res = await apiFetch('/api/community', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ export const Community = () => {
   const handleLikePost = async (postId) => {
     const token = localStorage.getItem('greenwatch_token');
     try {
-      const res = await fetch(`/api/community/${postId}/like`, {
+      const res = await apiFetch(`/api/community/${postId}/like`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -102,7 +103,7 @@ export const Community = () => {
 
     const token = localStorage.getItem('greenwatch_token');
     try {
-      const res = await fetch(`/api/community/${postId}/comment`, {
+      const res = await apiFetch(`/api/community/${postId}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
