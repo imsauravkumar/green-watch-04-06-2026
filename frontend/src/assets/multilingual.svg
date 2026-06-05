@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <!-- Background Sky Gradient -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f766e" /> <!-- Teal Sky -->
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
+    
+    <!-- Sun Gradient -->
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fde047" stop-opacity="1" />
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Crop Field Gradients -->
+    <linearGradient id="soil" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    
+    <linearGradient id="cropRow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="100%" height="100%" fill="url(#skyGrad)" />
+  
+  <!-- Glowing Sun -->
+  <circle cx="680" cy="100" r="150" fill="url(#sun)" />
+
+  <!-- Soil Ground -->
+  <path d="M 0,280 L 800,280 L 800,500 L 0,500 Z" fill="url(#soil)" />
+
+  <!-- Vector Perspective Crop Rows (Farming field look) -->
+  <path d="M 400,280 L 0,500 L 80,500 L 410,280 Z" fill="url(#cropRow)" opacity="0.8" />
+  <path d="M 410,280 L 160,500 L 250,500 L 420,280 Z" fill="url(#cropRow)" opacity="0.9" />
+  <path d="M 420,280 L 330,500 L 430,500 L 430,280 Z" fill="url(#cropRow)" opacity="0.8" />
+  <path d="M 430,280 L 510,500 L 610,500 L 440,280 Z" fill="url(#cropRow)" opacity="0.9" />
+  <path d="M 440,280 L 690,500 L 800,500 L 450,280 Z" fill="url(#cropRow)" opacity="0.8" />
+
+  <!-- Stylized Green Leaves in foreground -->
+  <path d="M 0,500 C 100,450 150,300 120,220 C 180,290 150,450 0,500 Z" fill="#10b981" opacity="0.4" />
+  <path d="M 800,500 C 700,450 650,300 680,220 C 620,290 650,450 800,500 Z" fill="#34d399" opacity="0.3" />
+
+  <!-- Translucent Dark Overlay for Text Readability -->
+  <rect width="100%" height="100%" fill="rgba(0, 25, 15, 0.45)" />
+
+  <!-- Sprout Icon (shifted down slightly for better margins) -->
+  <g transform="translate(376, 75)" opacity="0.95">
+    <path d="M24 2C11.85 2 2 11.85 2 24s9.85 22 22 22 22-9.85 22-22S36.15 2 24 2zm0 8c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6zm0 28c-5.33 0-10-2.67-12.89-6.78.04-3.97 7.93-6.14 12.89-6.14 4.96 0 12.85 2.17 12.89 6.14C34 35.33 29.33 38 24 38z" fill="#fde047" />
+  </g>
+
+  <!-- English: Hello -->
+  <text x="50%" y="235" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="70" fill="#ffffff" text-anchor="middle" letter-spacing="-1">
+    Hello
+  </text>
+
+  <!-- Hindi: नमस्ते -->
+  <text x="50%" y="325" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="52" fill="#34d399" text-anchor="middle">
+    नमस्ते
+  </text>
+
+  <!-- Punjabi: ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ -->
+  <text x="50%" y="405" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="44" fill="#a7f3d0" text-anchor="middle">
+    ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ
+  </text>
+</svg>

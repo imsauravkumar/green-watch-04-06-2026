@@ -4,6 +4,24 @@ import { apiFetch } from '../api';
 import { useTranslation } from '../hooks/useTranslation';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.jpg';
+import landingHero from '../assets/landing_hero.jpg';
+
+// Import farming option images
+import cropHealthImg from '../assets/crop_health.png';
+import weatherImg from '../assets/weather.png';
+import pestImg from '../assets/pest.png';
+import cropRecImg from '../assets/crop_rec.png';
+import fertilizerImg from '../assets/fertilizer.png';
+import dashboardImg from '../assets/dashboard.png';
+import marketImg from '../assets/market.png';
+import alertsImg from '../assets/alerts.png';
+import gpsImg from '../assets/gps.png';
+import communityImg from '../assets/community.png';
+import chatbotImg from '../assets/chatbot.png';
+import marketExchangeImg from '../assets/market_exchange.png';
+import messagingImg from '../assets/messaging.png';
+import multilingualImg from '../assets/multilingual.svg';
+
 import { 
   Leaf, 
   CloudRain, 
@@ -34,20 +52,20 @@ export const Home = () => {
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   const features = [
-    { num: 1, name: "Crop Health Monitoring", desc: "Detect crop diseases using AI and image recognition. Upload a plant image to identify diseases and get organic/chemical treatment suggestions.", icon: Leaf },
-    { num: 2, name: "Weather Forecast", desc: "Real-time weather updates including rainfall predictions, wind speeds, humidity indices, and daily 7-day temperature trends.", icon: CloudRain },
-    { num: 3, name: "Pest Detection & Control", desc: "Identify crop pests. Access biological, organic, and chemical control recommendations to safeguard harvest health.", icon: Bug },
-    { num: 4, name: "Crop Recommendation System", desc: "Recommend ideal crops based on soil nutrients, season, historical parameters, and atmospheric conditions.", icon: Calculator },
-    { num: 5, name: "Fertilizer Recommendation", desc: "Suggest optimal fertilizer types and required dosages matching your specific crop and soil properties.", icon: Compass },
-    { num: 6, name: "Farm Dashboard", desc: "View detailed statistics, current growth timelines, weather forecasts, alerts, and notifications in one integrated view.", icon: Map },
-    { num: 7, name: "Market Price Tracking", desc: "Daily crop pricing indexes tracked from local mandis and nearby markets. Decides the best time for you to sell.", icon: TrendingUp },
-    { num: 8, name: "Alert & Notification System", desc: "Get real-time warning alerts for extreme weather conditions, local pest outbreaks, and customized irrigation reminders.", icon: BellRing },
-    { num: 9, name: "GPS Farm Mapping", desc: "Mark coordinates of field boundaries and log specific crop zones on an interactive satellite-style map layout.", icon: MapPin },
-    { num: 10, name: "Farmer Community", desc: "Participate in discussion threads. Ask queries, share your agrarian hacks, and exchange tips with other farmers.", icon: Users2 },
-    { num: 11, name: "Multilingual Support", desc: "Read and navigate the portal in English, Hindi (हिंदी), and regional languages (ਪੰਜਾਬੀ) for easier accessibility.", icon: Globe2 },
-    { num: 12, name: "Agricultural Expert Chatbot", desc: "24/7 AI-powered agricultural advisor to answer farming questions, pest concerns, and weather guidelines immediately.", icon: Bot },
-    { num: 13, name: "Direct Market Exchange", desc: "Allows farmers to buy directly from sellers, and sellers to update inventory lists, add product stock, and list pictures.", icon: BarChart3 },
-    { num: 14, name: "Direct Messaging", desc: "Send messages directly to user roles. Direct broadcast messaging pipelines for administrator announcements.", icon: MessageCircle }
+    { num: 1, name: "Crop Health Monitoring", desc: "Detect crop diseases using AI and image recognition. Upload a plant image to identify diseases and get organic/chemical treatment suggestions.", icon: Leaf, image: cropHealthImg },
+    { num: 2, name: "Weather Forecast", desc: "Real-time weather updates including rainfall predictions, wind speeds, humidity indices, and daily 7-day temperature trends.", icon: CloudRain, image: weatherImg },
+    { num: 3, name: "Pest Detection & Control", desc: "Identify crop pests. Access biological, organic, and chemical control recommendations to safeguard harvest health.", icon: Bug, image: pestImg },
+    { num: 4, name: "Crop Recommendation System", desc: "Recommend ideal crops based on soil nutrients, season, historical parameters, and atmospheric conditions.", icon: Calculator, image: cropRecImg },
+    { num: 5, name: "Fertilizer Recommendation", desc: "Suggest optimal fertilizer types and required dosages matching your specific crop and soil properties.", icon: Compass, image: fertilizerImg },
+    { num: 6, name: "Farm Dashboard", desc: "View detailed statistics, current growth timelines, weather forecasts, alerts, and notifications in one integrated view.", icon: Map, image: dashboardImg },
+    { num: 7, name: "Market Price Tracking", desc: "Daily crop pricing indexes tracked from local mandis and nearby markets. Decides the best time for you to sell.", icon: TrendingUp, image: marketImg },
+    { num: 8, name: "Alert & Notification System", desc: "Get real-time warning alerts for extreme weather conditions, local pest outbreaks, and customized irrigation reminders.", icon: BellRing, image: alertsImg },
+    { num: 9, name: "GPS Farm Mapping", desc: "Mark coordinates of field boundaries and log specific crop zones on an interactive satellite-style map layout.", icon: MapPin, image: gpsImg },
+    { num: 10, name: "Farmer Community", desc: "Participate in discussion threads. Ask queries, share your agrarian hacks, and exchange tips with other farmers.", icon: Users2, image: communityImg },
+    { num: 11, name: "Multilingual Support", desc: "Read and navigate the portal in English, Hindi (हिंदी), and regional languages (ਪੰਜਾਬੀ) for easier accessibility.", icon: Globe2, image: multilingualImg },
+    { num: 12, name: "Agricultural Expert Chatbot", desc: "24/7 AI-powered agricultural advisor to answer farming questions, pest concerns, and weather guidelines immediately.", icon: Bot, image: chatbotImg },
+    { num: 13, name: "Direct Market Exchange", desc: "Allows farmers to buy directly from sellers, and sellers to update inventory lists, add product stock, and list pictures.", icon: BarChart3, image: marketExchangeImg },
+    { num: 14, name: "Direct Messaging", desc: "Send messages directly to user roles. Direct broadcast messaging pipelines for administrator announcements.", icon: MessageCircle, image: messagingImg }
   ];
 
   const handleInputChange = (e) => {
@@ -193,41 +211,20 @@ export const Home = () => {
             </div>
           </div>
           <div className="flex-1 flex justify-center">
-            {/* Visual Plant Card Mockup */}
-            <div className="w-80 bg-slate-50 rounded-2xl border border-slate-200 p-6 shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-100/40 rounded-full filter blur-xl" />
-              <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4">
-                <span className="text-3xl">🌱</span>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">Wheat Crop Diagnostic</h4>
-                  <p className="text-[10px] text-slate-400">Diagnosis Completed Now</p>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-slate-150">
-                  <span className="text-xs font-semibold text-slate-500">Condition</span>
-                  <span className="text-xs font-bold text-amber-600">Yellow Rust Detected</span>
-                </div>
-                <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-slate-150">
-                  <span className="text-xs font-semibold text-slate-500">Weather Forecast</span>
-                  <span className="text-xs font-bold text-emerald-600">Heavy Rain Tomorrow</span>
-                </div>
-                <div className="bg-emerald-50 text-emerald-800 text-[11px] p-3 rounded-lg font-medium leading-relaxed">
-                  Organic Remedy: Spray neem oil solution. Ensure proper field drainage to combat rust.
-                </div>
-              </div>
+            <div className="w-full max-w-md h-72 sm:h-80 rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+              <img src={landingHero} alt="Smart Agriculture Landscape" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="max-w-5xl mx-auto py-20 px-6 text-center">
+      <section className="max-w-5xl mx-auto py-20 px-6 text-center" id="features">
         <div className="space-y-4 mb-16">
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
             {t('featuresList')}
           </h2>
-          <p className="text-sm text-slate-500 max-w-xl mx-auto">
+          <p className="text-sm text-slate-500 max-w-xl mx-auto font-medium">
             Explore the powerful modules engineered in Green Watch to make agriculture sustainable, profitable, and accessible.
           </p>
         </div>
@@ -238,28 +235,32 @@ export const Home = () => {
             return (
               <div 
                 key={f.num}
-                className="bg-white border border-slate-200/80 rounded-2xl p-6 text-left shadow-sm hover:shadow-xl hover:border-emerald-500/30 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group"
+                className="bg-white border border-slate-200/80 rounded-2xl text-left shadow-sm hover:shadow-xl hover:border-emerald-500/30 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group"
               >
                 {/* Accent glassmorphism spot in card background */}
                 <div className="absolute -top-12 -right-12 w-24 h-24 bg-emerald-50/50 group-hover:bg-emerald-100/50 rounded-full filter blur-xl transition-colors duration-300" />
                 
-                {/* Translucent number watermark */}
-                <div className="absolute top-4 right-4 text-4xl font-black text-slate-100 group-hover:text-emerald-500/10 transition-colors select-none duration-300">
-                  {String(f.num).padStart(2, '0')}
-                </div>
-
-                <div className="flex items-center mb-5">
-                  <div className="p-3 bg-emerald-50 border border-emerald-100/50 rounded-xl text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 transition-all duration-300 group-hover:rotate-6 shadow-sm">
-                    <IconComponent className="w-5 h-5" />
+                {/* Image Header with watermark number & float icon */}
+                <div className="h-40 w-full overflow-hidden relative border-b border-slate-100">
+                  <img src={f.image} alt={f.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent" />
+                  <div className="absolute top-3.5 left-3.5 p-2 bg-white/90 rounded-lg text-emerald-600 shadow-sm border border-emerald-100/30 backdrop-blur-sm group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                    <IconComponent className="w-4 h-4" />
+                  </div>
+                  {/* Translucent number watermark */}
+                  <div className="absolute top-3 right-4 text-3xl font-black text-white/60 group-hover:text-white/80 transition-colors select-none duration-300">
+                    {String(f.num).padStart(2, '0')}
                   </div>
                 </div>
 
-                <h3 className="font-extrabold text-slate-900 text-sm mb-2.5 tracking-tight group-hover:text-emerald-700 transition-colors duration-300">
-                  {f.name}
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                  {f.desc}
-                </p>
+                <div className="p-5 space-y-2 relative">
+                  <h3 className="font-extrabold text-slate-900 text-sm tracking-tight group-hover:text-emerald-700 transition-colors duration-300">
+                    {f.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                    {f.desc}
+                  </p>
+                </div>
               </div>
             );
           })}

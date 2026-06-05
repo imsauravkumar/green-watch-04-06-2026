@@ -64,10 +64,22 @@ router.get('/', protect, async (req, res) => {
     return res.json(generateMockWeather(location));
   }
 
+  let queryLocation = location;
+  if (location.includes(',')) {
+    const parts = location.split(',');
+    const city = parts[0].trim();
+    const country = parts[parts.length - 1].trim().toLowerCase();
+    if (country === 'india') {
+      queryLocation = `${city},IN`;
+    } else if (country.length > 2) {
+      queryLocation = city;
+    }
+  }
+
   try {
     // 1. Fetch current weather to get lat/lon or match name
     const currentRes = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(location)}&appid=${apiKey}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(queryLocation)}&appid=${apiKey}&units=metric`
     );
 
     if (!currentRes.ok) {

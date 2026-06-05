@@ -21,6 +21,16 @@ import {
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../api';
 
+// Import shortcut card images
+import cropHealthImg from '../assets/crop_health.png';
+import pestImg from '../assets/pest.png';
+import cropRecImg from '../assets/crop_rec.png';
+import fertilizerImg from '../assets/fertilizer.png';
+import marketImg from '../assets/market.png';
+import gpsImg from '../assets/gps.png';
+import marketExchangeImg from '../assets/market_exchange.png';
+import communityImg from '../assets/community.png';
+
 export const Dashboard = () => {
   const { user, isFarmer, isSeller } = useAuth();
   const { t } = useTranslation();
@@ -94,14 +104,14 @@ export const Dashboard = () => {
   const UsersGroup = MessageSquare;
 
   const farmShortcuts = [
-    { to: "/crop-health", label: t('cropHealth'), desc: t('scanCrops'), icon: Camera, show: isFarmer },
-    { to: "/pest-control", label: t('pestDetection'), desc: t('identifyPests'), icon: ShieldAlert, show: isFarmer },
-    { to: "/crop-rec", label: t('cropAdvisor'), desc: t('getBestCrops'), icon: SproutAdviser, show: isFarmer },
-    { to: "/fertilizer-rec", label: t('fertilizers'), desc: t('optimalFertilizer'), icon: Compass, show: isFarmer },
-    { to: "/market-prices", label: t('marketPrice'), desc: t('mandiTrends'), icon: TrendingUp, show: isFarmer },
-    { to: "/gps-mapping", label: t('gpsFarmMap'), desc: t('drawBoundaries'), icon: Map, show: isFarmer },
-    { to: "/marketplace", label: t('marketplace'), desc: t('sellBuyDirect'), icon: StoreShortcut, show: isFarmer || isSeller },
-    { to: "/community", label: t('forumBoard'), desc: t('engageExperts'), icon: UsersGroup, show: true }
+    { to: "/crop-health", label: t('cropHealth'), desc: t('scanCrops'), icon: Camera, image: cropHealthImg, show: isFarmer },
+    { to: "/pest-control", label: t('pestDetection'), desc: t('identifyPests'), icon: ShieldAlert, image: pestImg, show: isFarmer },
+    { to: "/crop-rec", label: t('cropAdvisor'), desc: t('getBestCrops'), icon: SproutAdviser, image: cropRecImg, show: isFarmer },
+    { to: "/fertilizer-rec", label: t('fertilizers'), desc: t('optimalFertilizer'), icon: Compass, image: fertilizerImg, show: isFarmer },
+    { to: "/market-prices", label: t('marketPrice'), desc: t('mandiTrends'), icon: TrendingUp, image: marketImg, show: isFarmer },
+    { to: "/gps-mapping", label: t('gpsFarmMap'), desc: t('drawBoundaries'), icon: Map, image: gpsImg, show: isFarmer },
+    { to: "/marketplace", label: t('marketplace'), desc: t('sellBuyDirect'), icon: StoreShortcut, image: marketExchangeImg, show: isFarmer || isSeller },
+    { to: "/community", label: t('forumBoard'), desc: t('engageExperts'), icon: UsersGroup, image: communityImg, show: true }
   ];
 
   if (!user) return null;
@@ -271,17 +281,32 @@ export const Dashboard = () => {
                 <Link
                   key={idx}
                   to={shortcut.to}
-                  className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all text-left flex flex-col group"
+                  className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-emerald-350 transition-all text-left flex flex-col group"
                 >
-                  <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600 w-fit mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                    <IconComponent className="w-4 h-4" />
+                  {/* Card Header Image */}
+                  <div className="h-24 w-full overflow-hidden relative bg-slate-100">
+                    <img 
+                      src={shortcut.image} 
+                      alt={shortcut.label} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out" 
+                    />
+                    <div className="absolute top-2 left-2 p-1.5 bg-white/90 backdrop-blur-sm rounded-lg text-emerald-600 shadow-sm">
+                      <IconComponent className="w-3.5 h-3.5" />
+                    </div>
                   </div>
-                  <h3 className="font-bold text-slate-900 text-xs flex items-center gap-1">
-                    {shortcut.label} <ArrowUpRight className="w-3 h-3 text-slate-300 opacity-0 group-hover:opacity-100 group-hover:text-emerald-600 transition-all" />
-                  </h3>
-                  <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">
-                    {shortcut.desc}
-                  </p>
+
+                  {/* Card Body */}
+                  <div className="p-3.5 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-bold text-slate-900 text-xs flex items-center justify-between group-hover:text-emerald-700 transition-colors">
+                        <span className="truncate">{shortcut.label}</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                      </h3>
+                      <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">
+                        {shortcut.desc}
+                      </p>
+                    </div>
+                  </div>
                 </Link>
               );
             })}

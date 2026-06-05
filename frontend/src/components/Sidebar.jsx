@@ -89,7 +89,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
 
         {/* ── Nav sections ─────────────────────────────── */}
-        <nav className="flex-1 overflow-y-hidden py-4 px-3 space-y-5">
+        <nav className="flex-1 overflow-y-auto sidebar-scroll py-4 px-3 space-y-4">
           {sections.map((section, si) => {
             const visible = section.items.filter(i => i.show);
             if (visible.length === 0) return null;
@@ -97,12 +97,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
             return (
               <div key={si}>
                 {/* Section heading */}
-                <p className="px-2 mb-1.5 text-[9px] font-bold tracking-widest text-slate-600 select-none">
+                <p className="px-2 mb-1 text-[10px] font-bold tracking-wider text-slate-500 uppercase select-none opacity-80">
                   {section.heading}
                 </p>
 
                 {/* Section nav links */}
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   {visible.map(item => {
                     const Icon = item.icon;
                     return (
@@ -111,10 +111,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
                         to={item.to}
                         onClick={onClose}
                         className={({ isActive }) =>
-                          `group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-medium transition-all duration-150 ${
+                          `group flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 ${
                             isActive
-                              ? 'bg-emerald-600 text-white shadow shadow-emerald-900/30'
-                              : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                              ? 'bg-gradient-to-r from-emerald-600 to-teal-650 text-white shadow-md shadow-emerald-950/40'
+                              : 'text-slate-400 hover:bg-slate-800/80 hover:text-white'
                           }`
                         }
                       >
@@ -143,7 +143,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         <div className="px-3 py-3 border-t border-slate-800 shrink-0">
           <button
             onClick={() => setShowLogoutConfirm(true)}
-            className="group flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] font-semibold text-slate-500 hover:bg-red-950/30 hover:text-red-400 transition-all duration-150"
+            className="group flex w-full items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-500 hover:bg-red-950/30 hover:text-red-400 transition-all duration-200"
           >
             <LogOut className="h-4 w-4 shrink-0 group-hover:text-red-400 transition-colors" />
             <span>{t('navLogout')}</span>

@@ -97,6 +97,18 @@
   @apply bg-slate-300 rounded-full hover:bg-slate-400;
 }
 
+/* Sidebar specific dark scrollbar styling */
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(30, 41, 59, 0.7);
+  border-radius: 9999px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(51, 65, 85, 0.9);
+}
+
 /* Modal entrance animation */
 @keyframes fadeInUp {
   from {

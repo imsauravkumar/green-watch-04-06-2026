@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Sparkles, Mail, Lock, User, MapPin, Shield, Sprout, Store, AlertTriangle, Globe } from 'lucide-react';
 import logo from '../assets/logo.jpg';
+import authSide from '../assets/auth_side.svg';
 
 export const Signup = () => {
   const { signup } = useAuth();
@@ -56,7 +57,7 @@ export const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-12 relative">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center lg:grid lg:grid-cols-2 lg:items-stretch lg:p-0 relative overflow-hidden">
       {/* Floating Language Picker */}
       <div className="absolute top-4 right-4 z-50">
         <div className="relative">
@@ -97,153 +98,191 @@ export const Signup = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-lg bg-card border border-border rounded-2xl shadow-xl overflow-hidden p-8 space-y-6">
+      {/* Left side: Immersive connection illustration panel (desktop only) */}
+      <div className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 text-white h-screen sticky top-0 overflow-hidden">
+        {/* Background glow lines */}
+        <div className="absolute inset-0 bg-emerald-950/10 backdrop-blur-[1px] z-0" />
         
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <Link to="/" className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl overflow-hidden hover:scale-105 transition-transform">
-            <img src={logo} alt="Green Watch Logo" className="h-full w-full object-contain hd-logo" />
+        {/* Floating branding/overlay content */}
+        <div className="relative flex flex-col justify-between h-full flex-1 z-10">
+          <Link to="/" className="flex items-center gap-2 group self-start">
+            <div className="h-9 w-9 rounded-lg overflow-hidden bg-white/95 p-0.5 shadow-sm">
+              <img src={logo} alt="Green Watch Logo" className="h-full w-full object-contain" />
+            </div>
+            <span className="text-base font-extrabold tracking-tight text-white group-hover:text-emerald-250 transition-colors">
+              Green Watch
+            </span>
           </Link>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">
-            {t('signupTitle')}
-          </h2>
-          <p className="text-xs text-slate-500">
-            {t('signupSubtitle')}
-          </p>
-        </div>
-
-        {/* Error Alert */}
-        {error && (
-          <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded-lg text-xs font-semibold text-red-700">
-            <AlertTriangle className="w-4 h-4 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleFormSubmit} className="space-y-4 text-left">
           
-          {/* Name input */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-700 block">{t('nameLabel')} *</label>
-            <div className="relative">
-              <User className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                placeholder="E.g. Saurav Kumar"
-                className="w-full text-xs pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
+          {/* SVG Connection Illustration - Centered and scales cleanly */}
+          <div className="flex-1 flex items-center justify-center my-6">
+            <img src={authSide} alt="Agriculture Connection Diagram" className="max-h-[50vh] w-auto object-contain animate-in fade-in zoom-in-95 duration-500" />
           </div>
-
-          {/* Email input */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-700 block">{t('emailLabel')} *</label>
-            <div className="relative">
-              <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                placeholder="you@example.com"
-                className="w-full text-xs pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
+          
+          <div className="space-y-3 max-w-md">
+            <h1 className="text-2xl font-extrabold leading-tight tracking-tight">
+              Bridging the gap between farmers and direct markets.
+            </h1>
+            <p className="text-xs text-emerald-100/95 leading-relaxed font-semibold">
+              Empowering farmers with smart agricultural tools: AI diagnostics, weather alerts, real price index, and direct market trade.
+            </p>
+            <p className="text-[10px] text-emerald-200/50 font-semibold uppercase tracking-wider pt-2">
+              © 2026 Green Watch Agriculture System
+            </p>
           </div>
-
-          {/* Password input */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-700 block">{t('passwordLabel')} *</label>
-            <div className="relative">
-              <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                placeholder="Minimum 6 characters"
-                className="w-full text-xs pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-          </div>
-
-          {/* Location input */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-700 block">{t('locationLabel')}</label>
-            <div className="relative">
-              <MapPin className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleInputChange}
-                placeholder="E.g. New Delhi, India"
-                className="w-full text-xs pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-          </div>
-
-          {/* Visual Role Selector Cards */}
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-700 block">{t('roleLabel')} *</label>
-            <div className="grid grid-cols-3 gap-3">
-              {/* Farmer option card */}
-              <button
-                type="button"
-                onClick={() => handleRoleSelect('farmer')}
-                className={`p-3 border rounded-xl flex flex-col items-center gap-1.5 transition-all text-center ${formData.role === 'farmer' ? 'border-emerald-600 bg-emerald-50/50 text-emerald-800 ring-2 ring-emerald-600/10' : 'border-slate-200 hover:bg-slate-50 text-slate-600'}`}
-              >
-                <Sprout className={`w-5 h-5 ${formData.role === 'farmer' ? 'text-emerald-600' : 'text-slate-400'}`} />
-                <span className="text-[10px] font-bold block leading-none">{t('roleFarmer')}</span>
-              </button>
-
-              {/* Seller option card */}
-              <button
-                type="button"
-                onClick={() => handleRoleSelect('seller')}
-                className={`p-3 border rounded-xl flex flex-col items-center gap-1.5 transition-all text-center ${formData.role === 'seller' ? 'border-emerald-600 bg-emerald-50/50 text-emerald-800 ring-2 ring-emerald-600/10' : 'border-slate-200 hover:bg-slate-50 text-slate-600'}`}
-              >
-                <Store className={`w-5 h-5 ${formData.role === 'seller' ? 'text-emerald-600' : 'text-slate-400'}`} />
-                <span className="text-[10px] font-bold block leading-none">{t('roleSeller')}</span>
-              </button>
-
-              {/* Both option card */}
-              <button
-                type="button"
-                onClick={() => handleRoleSelect('both')}
-                className={`p-3 border rounded-xl flex flex-col items-center gap-1.5 transition-all text-center ${formData.role === 'both' ? 'border-emerald-600 bg-emerald-50/50 text-emerald-800 ring-2 ring-emerald-600/10' : 'border-slate-200 hover:bg-slate-50 text-slate-600'}`}
-              >
-                <Shield className={`w-5 h-5 ${formData.role === 'both' ? 'text-emerald-600' : 'text-slate-400'}`} />
-                <span className="text-[10px] font-bold block leading-none">{t('roleBoth')}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Submit Action */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-3 px-4 rounded-lg flex items-center justify-center transition-colors shadow-sm disabled:opacity-50 mt-2"
-          >
-            {loading ? t('creatingAccount') : t('authSubmitSignup')}
-          </button>
-        </form>
-
-        <div className="text-center pt-2 border-t border-slate-100">
-          <p className="text-xs text-slate-500">
-            {t('haveAccount')}{" "}
-            <Link to="/login" className="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">
-              {t('signInInstead')}
-            </Link>
-          </p>
         </div>
+      </div>
 
+      {/* Right side: Form Container */}
+      <div className="w-full flex items-center justify-center p-4 lg:p-6 h-full relative min-h-screen">
+        <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden py-4 px-6 space-y-4">
+          
+          {/* Header */}
+          <div className="text-center space-y-1">
+            <Link to="/" className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden hover:scale-105 transition-transform">
+              <img src={logo} alt="Green Watch Logo" className="h-full w-full object-contain hd-logo" />
+            </Link>
+            <h2 className="text-lg font-bold tracking-tight text-slate-900 leading-tight">
+              {t('signupTitle')}
+            </h2>
+            <p className="text-[11px] text-slate-500 leading-tight">
+              {t('signupSubtitle')}
+            </p>
+          </div>
+
+          {/* Error Alert */}
+          {error && (
+            <div className="flex items-center gap-2 p-2 bg-red-50 border border-red-100 rounded-lg text-xs font-semibold text-red-700">
+              <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleFormSubmit} className="space-y-2.5 text-left">
+            
+            {/* Name input */}
+            <div className="space-y-0.5">
+              <label className="text-[11px] font-semibold text-slate-700 block">{t('nameLabel')} *</label>
+              <div className="relative">
+                <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="E.g. Saurav Kumar"
+                  className="w-full text-xs pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+
+            {/* Email input */}
+            <div className="space-y-0.5">
+              <label className="text-[11px] font-semibold text-slate-700 block">{t('emailLabel')} *</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="user@email.com"
+                  className="w-full text-xs pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+
+            {/* Password input */}
+            <div className="space-y-0.5">
+              <label className="text-[11px] font-semibold text-slate-700 block">{t('passwordLabel')} *</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Minimum 6 characters"
+                  className="w-full text-xs pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+
+            {/* Location input */}
+            <div className="space-y-0.5">
+              <label className="text-[11px] font-semibold text-slate-700 block">{t('locationLabel')}</label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleInputChange}
+                  placeholder="E.g. New Delhi, India"
+                  className="w-full text-xs pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+
+            {/* Visual Role Selector Cards */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-semibold text-slate-700 block">{t('roleLabel')} *</label>
+              <div className="grid grid-cols-3 gap-2">
+                {/* Farmer option card */}
+                <button
+                  type="button"
+                  onClick={() => handleRoleSelect('farmer')}
+                  className={`py-1.5 px-1 border rounded-lg flex flex-col items-center gap-1 transition-all text-center ${formData.role === 'farmer' ? 'border-emerald-600 bg-emerald-50/50 text-emerald-800 ring-2 ring-emerald-600/10' : 'border-slate-200 hover:bg-slate-50 text-slate-600'}`}
+                >
+                  <Sprout className={`w-4 h-4 ${formData.role === 'farmer' ? 'text-emerald-600' : 'text-slate-400'}`} />
+                  <span className="text-[9px] font-bold block leading-none">{t('roleFarmer')}</span>
+                </button>
+
+                {/* Seller option card */}
+                <button
+                  type="button"
+                  onClick={() => handleRoleSelect('seller')}
+                  className={`py-1.5 px-1 border rounded-lg flex flex-col items-center gap-1 transition-all text-center ${formData.role === 'seller' ? 'border-emerald-600 bg-emerald-50/50 text-emerald-800 ring-2 ring-emerald-600/10' : 'border-slate-200 hover:bg-slate-50 text-slate-600'}`}
+                >
+                  <Store className={`w-4 h-4 ${formData.role === 'seller' ? 'text-emerald-600' : 'text-slate-400'}`} />
+                  <span className="text-[9px] font-bold block leading-none">{t('roleSeller')}</span>
+                </button>
+
+                {/* Both option card */}
+                <button
+                  type="button"
+                  onClick={() => handleRoleSelect('both')}
+                  className={`py-1.5 px-1 border rounded-lg flex flex-col items-center gap-1 transition-all text-center ${formData.role === 'both' ? 'border-emerald-600 bg-emerald-50/50 text-emerald-800 ring-2 ring-emerald-600/10' : 'border-slate-200 hover:bg-slate-50 text-slate-600'}`}
+                >
+                  <Shield className={`w-4 h-4 ${formData.role === 'both' ? 'text-emerald-600' : 'text-slate-400'}`} />
+                  <span className="text-[9px] font-bold block leading-none">{t('roleBoth')}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Submit Action */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center transition-colors shadow-sm disabled:opacity-50 mt-1"
+            >
+              {loading ? t('creatingAccount') : t('authSubmitSignup')}
+            </button>
+          </form>
+
+          <div className="text-center pt-1.5 border-t border-slate-100">
+            <p className="text-xs text-slate-500">
+              {t('haveAccount')}{" "}
+              <Link to="/login" className="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">
+                {t('signInInstead')}
+              </Link>
+            </p>
+          </div>
+
+        </div>
       </div>
     </div>
   );

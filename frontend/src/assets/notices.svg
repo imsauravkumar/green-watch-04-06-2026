@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="100%" height="100%">
+  <!-- Definitions for gradients and drop shadows -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#022c22"/> <!-- Deep Emerald-950 -->
+      <stop offset="50%" stop-color="#064e3b"/> <!-- Emerald-900 -->
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/> <!-- Amber-400 -->
+      <stop offset="100%" stop-color="#d97706"/> <!-- Amber-600 -->
+    </linearGradient>
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#bgGrad)"/>
+
+  <!-- Background Decorative Shapes / Leaves -->
+  <path d="M 0,400 Q 300,300 600,350 T 1200,300 L 1200,400 Z" fill="#047857" opacity="0.2"/>
+  <path d="M 0,400 Q 400,200 800,320 T 1200,250 L 1200,400 Z" fill="#059669" opacity="0.1"/>
+
+  <!-- Glowing background circles -->
+  <circle cx="200" cy="180" r="120" fill="#10b981" opacity="0.15" filter="url(#glow)"/>
+  <circle cx="1000" cy="220" r="150" fill="#f59e0b" opacity="0.08" filter="url(#glow)"/>
+
+  <!-- Left Side: Megaphone/Announcement Illustration -->
+  <g transform="translate(180, 200)" filter="url(#shadow)">
+    <!-- Shield / Badge background -->
+    <path d="M-80,-60 L80,-60 L80,30 Q80,90 0,120 Q-80,90 -80,30 Z" fill="url(#glassGrad)" stroke="#ffffff" stroke-opacity="0.2" stroke-width="2"/>
+    
+    <!-- Megaphone -->
+    <g transform="translate(-10, -10)">
+      <!-- Main body of megaphone -->
+      <path d="M-40,-15 L-10,-15 L-5,-35 Q-2,-30 -2,-25 L-2,35 Q-2,40 -5,45 L-10,25 L-40,25 Z" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+      <path d="M-2,-25 L35,-45 Q45,-50 45,0 Q45,50 35,45 L-2,25 Z" fill="url(#goldGrad)" filter="url(#glow)"/>
+      <ellipse cx="35" cy="0" rx="6" ry="22" fill="#d97706"/>
+      <!-- Handle -->
+      <path d="M-25,25 L-25,50 Q-25,55 -20,55 L-15,55 Q-10,55 -10,50 L-10,25" fill="#64748b"/>
+      <!-- Sound waves -->
+      <path d="M60,-25 Q75,0 60,25" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" filter="url(#glow)"/>
+      <path d="M75,-40 Q95,0 75,40" fill="none" stroke="#fbbf24" stroke-width="5" stroke-linecap="round" opacity="0.8" filter="url(#glow)"/>
+      <!-- Star/Sparkle -->
+      <path d="M50,-60 L53,-45 L68,-42 L53,-39 L50,-24 L47,-39 L32,-42 L47,-45 Z" fill="#fbbf24" filter="url(#glow)"/>
+    </g>
+  </g>
+
+  <!-- Right Side: Beautiful Government Bulletin Board & Text Details -->
+  <g transform="translate(480, 100)">
+    <!-- Decorative Tag -->
+    <rect x="0" y="0" width="160" height="28" rx="14" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-width="1"/>
+    <circle cx="15" cy="14" r="4" fill="#10b981"/>
+    <text x="30" y="18" fill="#34d399" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" letter-spacing="1">OFFICIAL PORTAL</text>
+
+    <!-- Main Title -->
+    <text x="0" y="75" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="38" font-weight="800" letter-spacing="-0.5">Government Bulletins</text>
+    <text x="0" y="115" fill="#fbbf24" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="bold">Schemes, Advisories & Policy Updates</text>
+
+    <!-- Highlight Points -->
+    <g transform="translate(0, 150)">
+      <!-- Point 1 -->
+      <circle cx="10" cy="10" r="5" fill="#10b981"/>
+      <text x="25" y="14" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500">Real-time alerts directly from the Ministry of Agriculture</text>
+      
+      <!-- Point 2 -->
+      <circle cx="10" cy="35" r="5" fill="#10b981"/>
+      <text x="25" y="39" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500">Subsidies, crop insurance eligibility, and weather advisories</text>
+
+      <!-- Point 3 -->
+      <circle cx="10" cy="60" r="5" fill="#10b981"/>
+      <text x="25" y="64" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500">Verified policies translated in Hindi, Punjabi & English</text>
+    </g>
+  </g>
+</svg>

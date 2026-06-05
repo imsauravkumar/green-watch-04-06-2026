@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 70 540 650" width="100%" height="100%">
+  <defs>
+    <!-- Node Glow Gradients -->
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Transparent Background (styled via CSS/wrapper gradient) -->
+  <circle cx="300" cy="395" r="280" fill="url(#centerGlow)" />
+
+  <!-- Background Decorative Grid Lines -->
+  <path d="M 30,120 C 150,150 420,80 570,120" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.1" />
+  <path d="M 30,660 C 150,620 420,700 570,660" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.1" />
+
+  <!-- Connection Paths (Dashed Glowing Lines) -->
+  <path d="M 300,395 Q 180,350 150,210" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+  <path d="M 300,395 Q 420,350 450,210" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+  <path d="M 300,395 Q 180,395 90,390" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+  <path d="M 300,395 Q 420,395 510,390" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+  <path d="M 300,395 Q 180,440 150,560" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+  <path d="M 300,395 Q 420,440 450,560" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+  <path d="M 300,395 L 300,130" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+  <path d="M 300,395 L 300,650" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6,6" stroke-opacity="0.6" />
+
+  <!-- Glowing backgrounds for Nodes -->
+  <circle cx="150" cy="210" r="70" fill="url(#nodeGlow)" />
+  <circle cx="450" cy="210" r="70" fill="url(#nodeGlow)" />
+  <circle cx="90" cy="390" r="70" fill="url(#nodeGlow)" />
+  <circle cx="510" cy="390" r="70" fill="url(#nodeGlow)" />
+  <circle cx="150" cy="560" r="70" fill="url(#nodeGlow)" />
+  <circle cx="450" cy="560" r="70" fill="url(#nodeGlow)" />
+  <circle cx="300" cy="130" r="70" fill="url(#nodeGlow)" />
+  <circle cx="300" cy="650" r="70" fill="url(#nodeGlow)" />
+
+  <!-- Central Smartphone Device -->
+  <g transform="translate(230, 270)">
+    <!-- Phone Frame Shadow -->
+    <rect x="5" y="5" width="140" height="250" rx="24" fill="#011c16" opacity="0.5" />
+    <!-- Phone Outer Body -->
+    <rect width="140" height="250" rx="24" fill="#092d24" stroke="#10b981" stroke-width="3.5" />
+    <!-- Screen -->
+    <rect x="7" y="7" width="126" height="236" rx="18" fill="#021410" />
+    <!-- Speaker Notch -->
+    <rect x="45" y="7" width="50" height="15" rx="7" fill="#092d24" />
+    <circle cx="55" cy="14" r="2" fill="#10b981" />
+    
+    <!-- Phone Content (Green Watch Screen Logo Mockup) -->
+    <g transform="translate(45, 95)" opacity="0.9">
+      <!-- Logo circle -->
+      <circle cx="25" cy="20" r="28" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-width="2" />
+      <!-- Plant icon lines -->
+      <path d="M 25,38 L 25,10 C 25,10 12,14 12,20 C 12,25 25,28 25,28" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 25,38 L 25,15 C 25,15 38,19 38,25 C 38,30 25,33 25,33" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 25,38 L 25,2" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" />
+    </g>
+    <!-- Screen Text -->
+    <text x="70" y="170" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="12" fill="#ffffff" text-anchor="middle" letter-spacing="1">GREEN WATCH</text>
+    <text x="70" y="188" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="9" fill="#34d399" text-anchor="middle" opacity="0.8">CONNECTED</text>
+  </g>
+
+  <!-- Node 1: Farmers (Farmer Person Hat) -->
+  <g transform="translate(110, 170)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Farmer Head Silhouette -->
+    <circle cx="40" cy="37" r="6.2" fill="none" stroke="#fde047" stroke-width="2.3" />
+    <!-- Farmer Shoulders -->
+    <path d="M 22,53 C 22,46 28,44 40,44 C 52,44 58,46 58,53" fill="none" stroke="#fde047" stroke-width="2.3" stroke-linecap="round" />
+    <!-- Farmer Straw Hat (Crown and Brim) -->
+    <path d="M 26,29 C 26,18 30,16 40,16 C 50,16 54,18 54,29" fill="none" stroke="#fde047" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 16,30 C 24,27 32,25 40,25 C 48,25 56,27 64,30" fill="none" stroke="#fde047" stroke-width="2.3" stroke-linecap="round" />
+    <!-- Hat Ribbon Detail -->
+    <path d="M 27,27.5 C 32,26.2 38,25.5 40,25.5 C 42,25.5 48,26.2 53,27.5" fill="none" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">Farmers</text>
+  </g>
+
+  <!-- Node 2: Sellers (Store) -->
+  <g transform="translate(410, 170)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Store/Cart Icon -->
+    <path d="M 22,28 L 58,28 L 54,48 L 26,48 Z" fill="none" stroke="#fde047" stroke-width="2.5" stroke-linejoin="round" />
+    <path d="M 26,28 L 30,22 L 50,22 L 54,28" fill="none" stroke="#fde047" stroke-width="2.5" stroke-linecap="round" />
+    <circle cx="32" cy="54" r="3.5" fill="#fde047" />
+    <circle cx="48" cy="54" r="3.5" fill="#fde047" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">Sellers</text>
+  </g>
+
+  <!-- Node 3: Weather (Sun & Cloud) -->
+  <g transform="translate(50, 350)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Sun/Cloud Icon -->
+    <circle cx="46" cy="32" r="10" fill="none" stroke="#fde047" stroke-width="2" />
+    <path d="M 24,46 C 24,38 32,36 36,38 C 39,33 48,34 50,39 C 55,39 58,42 56,47 Z" fill="#064e3b" stroke="#fde047" stroke-width="2" stroke-linejoin="round" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">Weather</text>
+  </g>
+
+  <!-- Node 4: Diagnostics (Leaf Scan Shield) -->
+  <g transform="translate(470, 350)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Shield/Leaf Icon -->
+    <path d="M 26,24 L 40,20 L 54,24 L 54,42 C 54,50 40,56 40,56 C 40,56 26,50 26,42 Z" fill="none" stroke="#fde047" stroke-width="2.5" stroke-linejoin="round" />
+    <path d="M 34,38 L 40,32 L 46,38" fill="none" stroke="#fde047" stroke-width="2" stroke-linecap="round" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">AI Diagnosis</text>
+  </g>
+
+  <!-- Node 5: GPS Mapping -->
+  <g transform="translate(110, 520)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Map Pin Icon -->
+    <path d="M 40,20 C 31,20 24,27 24,36 C 24,47 40,58 40,58 C 40,58 56,47 56,36 C 56,27 49,20 40,20 Z" fill="none" stroke="#fde047" stroke-width="2.2" stroke-linejoin="round" />
+    <circle cx="40" cy="33" r="4" fill="none" stroke="#fde047" stroke-width="2" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">GPS Mapping</text>
+  </g>
+
+  <!-- Node 6: Mandi Prices -->
+  <g transform="translate(410, 520)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Trending Up Chart Icon -->
+    <path d="M 22,50 L 32,38 L 42,44 L 56,24" fill="none" stroke="#fde047" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 46,24 L 56,24 L 56,34" fill="none" stroke="#fde047" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">Mandi Prices</text>
+  </g>
+
+  <!-- Node 7: Community -->
+  <g transform="translate(260, 90)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Users Icon -->
+    <circle cx="34" cy="30" r="6" fill="none" stroke="#fde047" stroke-width="2" />
+    <path d="M 20,48 C 20,40 28,38 34,38 C 40,38 48,40 48,48" fill="none" stroke="#fde047" stroke-width="2" stroke-linecap="round" />
+    <circle cx="48" cy="28" r="5" fill="none" stroke="#fde047" stroke-width="1.8" />
+    <path d="M 42,44 C 42,40 48,39 52,39 C 56,39 60,40 60,44" fill="none" stroke="#fde047" stroke-width="1.8" stroke-linecap="round" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">Community</text>
+  </g>
+
+  <!-- Node 8: AI Chatbot -->
+  <g transform="translate(260, 610)">
+    <circle cx="40" cy="40" r="32" fill="#064e3b" stroke="#34d399" stroke-width="2" />
+    <!-- Robot Icon -->
+    <rect x="25" y="27" width="30" height="22" rx="5" fill="none" stroke="#fde047" stroke-width="2.5" />
+    <circle cx="34" cy="35" r="2.5" fill="#fde047" />
+    <circle cx="46" cy="35" r="2.5" fill="#fde047" />
+    <path d="M 33,42 L 47,42" fill="none" stroke="#fde047" stroke-width="2" stroke-linecap="round" />
+    <path d="M 40,27 L 40,20 L 37,20 M 40,20 L 43,20" fill="none" stroke="#fde047" stroke-width="2" stroke-linecap="round" />
+    <text x="40" y="88" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">AI Chatbot</text>
+  </g>
+</svg>

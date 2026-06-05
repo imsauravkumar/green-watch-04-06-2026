@@ -19,48 +19,37 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    setLoading(true);
     try {
       const result = await auth.signInWithEmailAndPassword(email, password);
       return result.user;
     } catch (error) {
-      setLoading(false);
       throw error;
     }
   };
 
   const signup = async (email, password, name, role, location) => {
-    setLoading(true);
     try {
       const result = await auth.createUserWithEmailAndPassword(email, password, name, role, location);
       return result.user;
     } catch (error) {
-      setLoading(false);
       throw error;
     }
   };
 
   const logout = async () => {
-    setLoading(true);
     try {
       await auth.signOut();
       setUser(null);
     } catch (error) {
       console.error("Logout error", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const resetPassword = async (email) => {
-    setLoading(true);
     try {
       await auth.sendPasswordResetEmail(email);
     } catch (error) {
-      setLoading(false);
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
