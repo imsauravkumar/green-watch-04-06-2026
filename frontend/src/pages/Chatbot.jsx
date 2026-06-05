@@ -81,7 +81,7 @@ export const Chatbot = () => {
   };
 
   return (
-    <div className="flex-1 p-6 flex flex-col h-[calc(100vh-4rem)] bg-slate-50 text-left">
+    <div className="flex-1 p-6 flex flex-col h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] bg-slate-50 text-left">
       
       {/* Title */}
       <div className="mb-4">

@@ -37,7 +37,7 @@ const MemberLayout = ({ children }) => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col overflow-hidden">
       <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-      <div className="flex flex-1 pt-16 overflow-hidden relative" style={{ height: '100vh' }}>
+      <div className="flex flex-1 pt-16 overflow-hidden relative" style={{ height: '100dvh' }}>
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="flex-1 md:pl-64 overflow-y-auto flex flex-col w-full">
           {children}
