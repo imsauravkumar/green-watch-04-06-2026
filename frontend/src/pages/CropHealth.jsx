@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Camera, Upload, RefreshCw, CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
+import cropHealthImg from '../assets/crop_health.png';
 import { apiFetch } from '../api';
 
 export const CropHealth = () => {
@@ -48,11 +49,20 @@ export const CropHealth = () => {
   return (
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
-      <div>
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-          <Camera className="w-5 h-5 text-emerald-600" /> {t('cropHealthTitle')}
-        </h1>
-        <p className="text-xs text-slate-500">{t('cropHealthDesc')}</p>
+      {/* Header Banner */}
+      <div className="h-40 w-full rounded-2xl overflow-hidden relative shadow-md bg-slate-950">
+        <img
+          src={cropHealthImg}
+          alt={t('cropHealthTitle')}
+          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent flex flex-col justify-end p-6">
+          <div className="flex items-center gap-2 text-white">
+            <Camera className="w-6 h-6 text-emerald-400" />
+            <h1 className="text-lg font-bold tracking-tight">{t('cropHealthTitle')}</h1>
+          </div>
+          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed">{t('cropHealthDesc')}</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

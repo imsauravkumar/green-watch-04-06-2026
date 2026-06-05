@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Bug, Search, Upload, RefreshCw, AlertTriangle, ShieldCheck, Check } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
 import { apiFetch } from '../api';
+import pestImg from '../assets/pest.png';
 
 export const PestControl = () => {
   const { t, locale } = useTranslation();
@@ -92,12 +93,20 @@ export const PestControl = () => {
   return (
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
-      {/* Title */}
-      <div>
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-          <Bug className="w-5 h-5 text-emerald-600" /> {t('pestControlTitle')}
-        </h1>
-        <p className="text-xs text-slate-500">{t('pestControlDesc')}</p>
+      {/* Header Banner */}
+      <div className="h-40 w-full rounded-2xl overflow-hidden relative shadow-md bg-slate-950">
+        <img
+          src={pestImg}
+          alt={t('pestControlTitle')}
+          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent flex flex-col justify-end p-6">
+          <div className="flex items-center gap-2 text-white">
+            <Bug className="w-6 h-6 text-emerald-400" />
+            <h1 className="text-lg font-bold tracking-tight">{t('pestControlTitle')}</h1>
+          </div>
+          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed">{t('pestControlDesc')}</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
