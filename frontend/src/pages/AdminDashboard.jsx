@@ -591,7 +591,7 @@ export const AdminDashboard = () => {
           {/* Search Bar for data lists */}
           {activeTab !== 'broadcast' && activeTab !== 'messages' && (
             <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center">
-              <div className="relative w-72">
+              <div className="relative w-full max-w-xs">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <input
                   type="text"
@@ -614,140 +614,259 @@ export const AdminDashboard = () => {
               
               {/* 1. USERS LIST TAB */}
               {activeTab === 'users' && (
-                <table className="w-full text-sm text-slate-600">
-                  <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-xs font-bold">
-                    <tr>
-                      <th className="px-6 py-3.5 text-left">{t('colUserName')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colEmailAddr')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colAssignedRole')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colLocation')}</th>
-                      <th className="px-6 py-3.5 text-center">{t('colActions')}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 font-medium bg-white">
-                    {filteredUsers.length === 0 ? (
+                <>
+                  {/* Desktop Table View */}
+                  <table className="hidden md:table w-full text-sm text-slate-600">
+                    <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-xs font-bold">
                       <tr>
-                        <td colSpan={5} className="text-center py-8 text-slate-400">
-                          {fetchError ? '⚠ Could not load users — see error above' : t('noUsersFoundFilter')}
-                        </td>
+                        <th className="px-6 py-3.5 text-left">{t('colUserName')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colEmailAddr')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colAssignedRole')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colLocation')}</th>
+                        <th className="px-6 py-3.5 text-center">{t('colActions')}</th>
                       </tr>
-                    ) : (
-                      filteredUsers.map((u) => (
-                        <tr key={u.id || u._id} className="hover:bg-slate-50/50">
-                          <td className="px-6 py-3.5 flex items-center gap-2 text-sm text-slate-900">
-                            <span className="text-base">🌱</span>
-                            <span className="font-semibold">{u.name}</span>
-                          </td>
-                          <td className="px-6 py-3.5 text-sm text-slate-505">{u.email}</td>
-                          <td className="px-6 py-3.5 text-sm">
-                            <span className={`inline-flex px-2.5 py-0.5 rounded text-xs font-semibold uppercase ${u.role === 'admin' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' : u.role === 'both' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'}`}>
-                              {u.role === 'admin' ? t('admin') : u.role === 'farmer' ? t('roleFarmer') : u.role === 'seller' ? t('roleSeller') : u.role === 'both' ? t('roleBoth') : u.role}
-                            </span>
-                          </td>
-                          <td className="px-6 py-3.5 text-sm text-slate-505">{u.location}</td>
-                          <td className="px-6 py-3.5 text-center text-sm">
-                            {u.role !== 'admin' && (
-                              <button
-                                onClick={() => handleDeleteUser(u.id || u._id)}
-                                className="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors"
-                                title="Delete User"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            )}
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 font-medium bg-white">
+                      {filteredUsers.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="text-center py-8 text-slate-400">
+                            {fetchError ? '⚠ Could not load users — see error above' : t('noUsersFoundFilter')}
                           </td>
                         </tr>
+                      ) : (
+                        filteredUsers.map((u) => (
+                          <tr key={u.id || u._id} className="hover:bg-slate-50/50">
+                            <td className="px-6 py-3.5 flex items-center gap-2 text-sm text-slate-900">
+                              <span className="text-base">🌱</span>
+                              <span className="font-semibold">{u.name}</span>
+                            </td>
+                            <td className="px-6 py-3.5 text-sm text-slate-505">{u.email}</td>
+                            <td className="px-6 py-3.5 text-sm">
+                              <span className={`inline-flex px-2.5 py-0.5 rounded text-xs font-semibold uppercase ${u.role === 'admin' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' : u.role === 'both' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'}`}>
+                                {u.role === 'admin' ? t('admin') : u.role === 'farmer' ? t('roleFarmer') : u.role === 'seller' ? t('roleSeller') : u.role === 'both' ? t('roleBoth') : u.role}
+                              </span>
+                            </td>
+                            <td className="px-6 py-3.5 text-sm text-slate-505">{u.location}</td>
+                            <td className="px-6 py-3.5 text-center text-sm">
+                              {u.role !== 'admin' && (
+                                <button
+                                  onClick={() => handleDeleteUser(u.id || u._id)}
+                                  className="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors"
+                                  title="Delete User"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+
+                  {/* Mobile Card List View */}
+                  <div className="grid grid-cols-1 gap-4 p-4 md:hidden bg-slate-50/50">
+                    {filteredUsers.length === 0 ? (
+                      <div className="text-center py-8 text-slate-400">
+                        {fetchError ? '⚠ Could not load users — see error above' : t('noUsersFoundFilter')}
+                      </div>
+                    ) : (
+                      filteredUsers.map((u) => (
+                        <div key={u.id || u._id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-2 relative">
+                          <div className="flex justify-between items-start gap-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-base">🌱</span>
+                              <span className="font-semibold text-slate-900 text-sm">{u.name}</span>
+                            </div>
+                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${u.role === 'admin' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' : u.role === 'both' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'}`}>
+                              {u.role === 'admin' ? t('admin') : u.role === 'farmer' ? t('roleFarmer') : u.role === 'seller' ? t('roleSeller') : u.role === 'both' ? t('roleBoth') : u.role}
+                            </span>
+                          </div>
+                          
+                          <div className="space-y-1 text-xs text-slate-500">
+                            <div><span className="font-bold text-slate-400 uppercase tracking-wider text-[9px] mr-1.5">Email:</span>{u.email}</div>
+                            <div><span className="font-bold text-slate-400 uppercase tracking-wider text-[9px] mr-1.5">Location:</span>{u.location || 'N/A'}</div>
+                          </div>
+
+                          {u.role !== 'admin' && (
+                            <div className="flex justify-end border-t border-slate-100 pt-2 mt-1">
+                              <button
+                                onClick={() => handleDeleteUser(u.id || u._id)}
+                                className="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors text-xs font-semibold flex items-center gap-1"
+                                title="Delete User"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" /> Delete User
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       ))
                     )}
-                  </tbody>
-                </table>
+                  </div>
+                </>
               )}
 
               {/* 2. PRODUCTS CATALOG TAB */}
               {activeTab === 'products' && (
-                <table className="w-full text-sm text-slate-600">
-                  <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-xs font-bold">
-                    <tr>
-                      <th className="px-6 py-3.5 text-left">{t('colProduct')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colListedBySeller')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colPrice')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colStockQty')}</th>
-                      <th className="px-6 py-3.5 text-center">{t('colActions')}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 font-medium bg-white">
-                    {filteredProducts.length === 0 ? (
+                <>
+                  {/* Desktop Table View */}
+                  <table className="hidden md:table w-full text-sm text-slate-600">
+                    <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-xs font-bold">
                       <tr>
-                        <td colSpan={5} className="text-center py-8 text-slate-400">{t('noProductsFoundFilter')}</td>
+                        <th className="px-6 py-3.5 text-left">{t('colProduct')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colListedBySeller')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colPrice')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colStockQty')}</th>
+                        <th className="px-6 py-3.5 text-center">{t('colActions')}</th>
                       </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 font-medium bg-white">
+                      {filteredProducts.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="text-center py-8 text-slate-400">{t('noProductsFoundFilter')}</td>
+                        </tr>
+                      ) : (
+                        filteredProducts.map((p) => (
+                          <tr key={p.id || p._id} className="hover:bg-slate-50/50">
+                            <td className="px-6 py-3.5 flex items-center gap-3 text-sm text-slate-900">
+                              <div className="w-10 h-10 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-sm overflow-hidden shrink-0">
+                                {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-cover" /> : "📦"}
+                              </div>
+                              <div>
+                                <span className="text-slate-900 font-semibold block">{p.name}</span>
+                                <span className="text-xs text-slate-400 block font-normal leading-normal mt-0.5 truncate max-w-xs">{p.description}</span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-3.5 text-sm text-slate-700">{p.sellerName}</td>
+                            <td className="px-6 py-3.5 text-sm font-bold text-slate-905">₹{p.price}</td>
+                            <td className="px-6 py-3.5 text-sm">
+                              <span className={`px-2 py-0.5 rounded text-xs font-bold ${p.stock === 0 ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-700'}`}>
+                                {p.stock} {t('unitsLabel')}
+                              </span>
+                            </td>
+                            <td className="px-6 py-3.5 text-center text-sm">
+                              <button
+                                onClick={() => handleDeleteProduct(p.id || p._id)}
+                                className="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors"
+                                title="Remove Product"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+
+                  {/* Mobile Card List View */}
+                  <div className="grid grid-cols-1 gap-4 p-4 md:hidden bg-slate-50/50">
+                    {filteredProducts.length === 0 ? (
+                      <div className="text-center py-8 text-slate-400">{t('noProductsFoundFilter')}</div>
                     ) : (
                       filteredProducts.map((p) => (
-                        <tr key={p.id || p._id} className="hover:bg-slate-50/50">
-                          <td className="px-6 py-3.5 flex items-center gap-3 text-sm text-slate-900">
-                            <div className="w-10 h-10 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-sm overflow-hidden shrink-0">
+                        <div key={p.id || p._id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3 relative animate-fade-in text-left">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-base overflow-hidden shrink-0">
                               {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-cover" /> : "📦"}
                             </div>
-                            <div>
-                              <span className="text-slate-900 font-semibold block">{p.name}</span>
-                              <span className="text-xs text-slate-400 block font-normal leading-normal mt-0.5 truncate max-w-xs">{p.description}</span>
+                            <div className="flex-1 min-w-0">
+                              <span className="text-slate-900 font-bold text-sm block truncate">{p.name}</span>
+                              <span className="text-xs text-slate-500 font-semibold block truncate">Seller: {p.sellerName}</span>
                             </div>
-                          </td>
-                          <td className="px-6 py-3.5 text-sm text-slate-700">{p.sellerName}</td>
-                          <td className="px-6 py-3.5 text-sm font-bold text-slate-905">₹{p.price}</td>
-                          <td className="px-6 py-3.5 text-sm">
+                          </div>
+                          
+                          <p className="text-xs text-slate-500 font-normal line-clamp-2 leading-relaxed bg-slate-50 p-2 rounded-lg">{p.description}</p>
+                          
+                          <div className="flex justify-between items-center text-xs">
+                            <div className="font-extrabold text-slate-900">₹{p.price}</div>
                             <span className={`px-2 py-0.5 rounded text-xs font-bold ${p.stock === 0 ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-700'}`}>
                               {p.stock} {t('unitsLabel')}
                             </span>
-                          </td>
-                          <td className="px-6 py-3.5 text-center text-sm">
+                          </div>
+
+                          <div className="flex justify-end border-t border-slate-100 pt-2">
                             <button
                               onClick={() => handleDeleteProduct(p.id || p._id)}
-                              className="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors"
+                              className="text-red-500 hover:text-red-755 p-1.5 rounded hover:bg-red-50 transition-colors text-xs font-semibold flex items-center gap-1"
                               title="Remove Product"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-3.5 h-3.5" /> Remove Product
                             </button>
-                          </td>
-                        </tr>
+                          </div>
+                        </div>
                       ))
                     )}
-                  </tbody>
-                </table>
+                  </div>
+                </>
               )}
 
               {/* 3. CONTACT MESSAGES TAB */}
               {activeTab === 'messages' && (
-                <table className="w-full text-sm text-slate-600">
-                  <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-xs font-bold">
-                    <tr>
-                      <th className="px-6 py-3.5 text-left">{t('colSenderDetails')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colSubject')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colMsgDesc')}</th>
-                      <th className="px-6 py-3.5 text-left">{t('colReceivedDate')}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 font-medium bg-white">
-                    {messages.length === 0 ? (
+                <>
+                  {/* Desktop Table View */}
+                  <table className="hidden md:table w-full text-sm text-slate-600">
+                    <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase tracking-wider text-xs font-bold">
                       <tr>
-                        <td colSpan={4} className="text-center py-8 text-slate-400">{t('noContactMsgs')}</td>
+                        <th className="px-6 py-3.5 text-left">{t('colSenderDetails')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colSubject')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colMsgDesc')}</th>
+                        <th className="px-6 py-3.5 text-left">{t('colReceivedDate')}</th>
                       </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 font-medium bg-white">
+                      {messages.length === 0 ? (
+                        <tr>
+                          <td colSpan={4} className="text-center py-8 text-slate-400">{t('noContactMsgs')}</td>
+                        </tr>
+                      ) : (
+                        messages.map((m) => (
+                          <tr key={m.id || m._id} className="hover:bg-slate-50/50">
+                            <td className="px-6 py-3.5 text-sm">
+                              <span className="text-slate-900 font-semibold block">{m.name}</span>
+                              <span className="text-xs text-slate-400 font-normal">{m.email}</span>
+                            </td>
+                            <td className="px-6 py-3.5 text-sm font-semibold text-slate-800">{m.subject}</td>
+                            <td className="px-6 py-3.5 text-sm text-slate-600 font-normal leading-relaxed max-w-sm whitespace-pre-wrap">{m.message}</td>
+                            <td className="px-6 py-3.5 text-xs text-slate-400 font-normal">
+                              {new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+
+                  {/* Mobile Card List View */}
+                  <div className="grid grid-cols-1 gap-4 p-4 md:hidden bg-slate-50/50">
+                    {messages.length === 0 ? (
+                      <div className="text-center py-8 text-slate-400">{t('noContactMsgs')}</div>
                     ) : (
                       messages.map((m) => (
-                        <tr key={m.id || m._id} className="hover:bg-slate-50/50">
-                          <td className="px-6 py-3.5 text-sm">
-                            <span className="text-slate-900 font-semibold block">{m.name}</span>
-                            <span className="text-xs text-slate-400 font-normal">{m.email}</span>
-                          </td>
-                          <td className="px-6 py-3.5 text-sm font-semibold text-slate-800">{m.subject}</td>
-                          <td className="px-6 py-3.5 text-sm text-slate-600 font-normal leading-relaxed max-w-sm whitespace-pre-wrap">{m.message}</td>
-                          <td className="px-6 py-3.5 text-xs text-slate-400 font-normal">
-                            {new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                          </td>
-                        </tr>
+                        <div key={m.id || m._id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-2 relative text-left">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <span className="text-slate-900 font-bold text-sm block">{m.name}</span>
+                              <span className="text-[10px] text-slate-400 font-medium block mt-0.5">{m.email}</span>
+                            </div>
+                            <span className="text-[10px] text-slate-400 font-medium">
+                              {new Date(m.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            </span>
+                          </div>
+
+                          <div className="text-xs font-bold text-slate-800 border-t border-slate-50 pt-1.5 mt-0.5">
+                            <span className="text-[9px] text-slate-400 uppercase font-extrabold mr-1">Subject:</span>
+                            {m.subject}
+                          </div>
+
+                          <p className="text-xs text-slate-606 font-normal leading-relaxed whitespace-pre-wrap bg-slate-50 p-2.5 rounded-lg border border-slate-150 mt-1">
+                            {m.message}
+                          </p>
+                        </div>
                       ))
                     )}
-                  </tbody>
-                </table>
+                  </div>
+                </>
               )}
 
 
@@ -765,10 +884,10 @@ export const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     
                     {/* Left/Main Column: List of Notices */}
-                    <div className="xl:col-span-2 space-y-3">
+                    <div className="lg:col-span-2 space-y-3">
                       <h4 className="text-sm font-bold text-slate-800 mb-2">Published Notices</h4>
                       {notices.length === 0 ? (
                         <div className="text-center py-10 bg-slate-50 border border-slate-100 rounded-xl text-slate-400 text-sm">No notices published yet.</div>
@@ -780,11 +899,11 @@ export const AdminDashboard = () => {
                                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{notice.category}</span>
                                 {notice.isImportant && <span className="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Important</span>}
                               </div>
-                              <h5 className="text-sm font-bold text-slate-900 mb-1">{notice.title}</h5>
-                              <p className="text-sm text-slate-605 mb-2 leading-relaxed whitespace-pre-line">{notice.content}</p>
-                              <div className="text-xs text-slate-400 font-medium">Source: {notice.source} | Posted: {new Date(notice.createdAt).toLocaleDateString()}</div>
+                              <h5 className="text-sm font-bold text-slate-900 mb-1 text-left">{notice.title}</h5>
+                              <p className="text-sm text-slate-605 mb-2 leading-relaxed whitespace-pre-line text-left">{notice.content}</p>
+                              <div className="text-xs text-slate-400 font-medium text-left">Source: {notice.source} | Posted: {new Date(notice.createdAt).toLocaleDateString()}</div>
                             </div>
-                            <button onClick={() => handleDeleteNotice(notice.id || notice._id)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg h-fit transition-colors" title="Delete Notice">
+                            <button onClick={() => handleDeleteNotice(notice.id || notice._id)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg h-fit transition-colors animate-fade-in" title="Delete Notice">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -793,16 +912,16 @@ export const AdminDashboard = () => {
                     </div>
 
                     {/* Right Column: Create Notices (Manual + Bulk Copy-Paste) */}
-                    <div className="xl:col-span-1 space-y-4">
+                    <div className="lg:col-span-1 space-y-4">
                       {/* Create Notice Form */}
                       <div className="bg-slate-50 border border-slate-100 rounded-xl p-5 h-fit space-y-4">
-                        <h4 className="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">Post New Notice</h4>
-                        <form onSubmit={handleCreateNotice} className="space-y-4">
+                        <h4 className="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2 text-left">Post New Notice</h4>
+                        <form onSubmit={handleCreateNotice} className="space-y-4 text-left">
                           <div>
                             <label className="text-xs font-bold text-slate-700 block mb-1">Title</label>
                             <input type="text" required value={newNotice.title} onChange={e => setNewNotice({...newNotice, title: e.target.value})} className="w-full text-sm px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Notice title" />
                           </div>
-                          <div className="grid grid-cols-2 gap-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                               <label className="text-xs font-bold text-slate-700 block mb-1">Category</label>
                               <select value={newNotice.category} onChange={e => setNewNotice({...newNotice, category: e.target.value})} className="w-full text-sm px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500">
@@ -874,13 +993,13 @@ export const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                     
                     {/* Manual Entry Form - spans 2 columns */}
-                    <div className="xl:col-span-2 bg-slate-50 border border-slate-100 rounded-xl p-5 space-y-4">
-                      <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-                        <h4 className="text-sm font-bold text-slate-800">Manual Price Editor</h4>
-                        <div className="flex items-center gap-2">
+                    <div className="lg:col-span-2 bg-slate-50 border border-slate-100 rounded-xl p-5 space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b border-slate-200 pb-2.5">
+                        <h4 className="text-sm font-bold text-slate-800 text-left">Manual Price Editor</h4>
+                        <div className="flex items-center gap-2 self-start sm:self-auto">
                           <label className="text-xs font-bold text-slate-500">Target Date:</label>
                           <input
                             type="text"
@@ -892,7 +1011,8 @@ export const AdminDashboard = () => {
                       </div>
 
                       <div className="overflow-x-auto border border-slate-200 rounded-xl">
-                        <table className="w-full text-sm text-slate-650">
+                        {/* Desktop Price Table */}
+                        <table className="hidden md:table w-full text-sm text-slate-650 animate-fade-in">
                           <thead className="bg-slate-100 border-b border-slate-200 text-slate-550 uppercase tracking-wider text-xs font-bold">
                             <tr>
                               <th className="px-6 py-3.5 text-left">Crop / Variety</th>
@@ -925,6 +1045,31 @@ export const AdminDashboard = () => {
                             ))}
                           </tbody>
                         </table>
+
+                        {/* Mobile Price Inputs List */}
+                        <div className="md:hidden divide-y divide-slate-100 bg-white">
+                          {Object.keys(priceInputs).map(crop => (
+                            <div key={crop} className="py-3.5 px-4 flex flex-col gap-2 text-left">
+                              <div className="flex justify-between items-start gap-2">
+                                <span className="text-slate-900 font-bold text-sm">{crop}</span>
+                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{cropConfig[crop]?.mandi || "N/A"}</span>
+                              </div>
+                              <div className="flex items-center gap-2 justify-between">
+                                <span className="text-slate-450 font-bold text-xs">Price (₹/Quintal):</span>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-slate-400 font-bold text-sm">₹</span>
+                                  <input
+                                    type="number"
+                                    value={priceInputs[crop]}
+                                    onChange={(e) => setPriceInputs({ ...priceInputs, [crop]: e.target.value })}
+                                    className="w-36 text-sm px-2 py-1 bg-slate-50 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500 text-right font-bold text-slate-800"
+                                    placeholder="0"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
 
                       <button
@@ -937,7 +1082,7 @@ export const AdminDashboard = () => {
                     </div>
 
                     {/* Copy-Paste Importer - spans 1 column */}
-                    <div className="xl:col-span-1 bg-slate-50 border border-slate-100 rounded-xl p-5 space-y-4 h-fit">
+                    <div className="lg:col-span-1 bg-slate-50 border border-slate-100 rounded-xl p-5 space-y-4 h-fit">
                       <h4 className="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2 flex items-center gap-1">
                         <Clipboard className="w-4 h-4 text-emerald-600" /> Bulk Copy-Paste Tool
                       </h4>

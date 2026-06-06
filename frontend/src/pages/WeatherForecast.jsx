@@ -141,7 +141,7 @@ export const WeatherForecast = () => {
             </div>
 
             {/* Weather Attributes grid */}
-            <div className="md:col-span-2 grid grid-cols-2 gap-6 p-2">
+            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 p-2">
               <div className="flex items-center gap-3.5 bg-slate-50 p-4 rounded-xl border border-slate-150">
                 <div className="p-2.5 bg-sky-50 rounded-lg text-sky-600">
                   <Droplet className="w-5 h-5" />

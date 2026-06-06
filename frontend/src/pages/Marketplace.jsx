@@ -552,7 +552,7 @@ export const Marketplace = () => {
         </div>
       ) : (
         /* ── Product Catalog & Inventory grid ── */
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {(activeTab === 'my-listings' ? myInventoryProducts : catalogProducts).length === 0 ? (
             activeTab === 'my-listings' ? (
               <div className="col-span-full text-center py-16 bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col items-center justify-center space-y-4">
