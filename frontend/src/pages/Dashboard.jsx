@@ -121,7 +121,7 @@ export const Dashboard = () => {
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
       {/* Header Info Banner */}
-      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 flex flex-col md:flex-row md:items-center justify-between p-6 text-white shrink-0">
+      <div className="min-h-[7rem] md:h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 flex flex-col md:flex-row md:items-center justify-between p-6 text-white gap-4 shrink-0">
         <img
           src={dashboardImg}
           alt="Dashboard"

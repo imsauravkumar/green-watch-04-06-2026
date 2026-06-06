@@ -69,13 +69,13 @@ export const WeatherForecast = () => {
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
       {/* Header Banner */}
-      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950">
+      <div className="min-h-[7rem] w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 flex items-center">
         <img
           src={weatherImg}
           alt={t('weatherForecast')}
-          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
+        <div className="relative z-10 w-full bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
             <div>
               <div className="flex items-center gap-2 text-white">
@@ -88,8 +88,8 @@ export const WeatherForecast = () => {
             </div>
 
             {/* Search */}
-            <form onSubmit={handleSearch} className="flex gap-2 self-start sm:self-auto shrink-0 z-10">
-              <div className="relative w-60">
+            <form onSubmit={handleSearch} className="flex flex-row items-center gap-2 w-full sm:w-auto shrink-0 z-10">
+              <div className="relative flex-1 sm:w-60">
                 <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
                 <input
                   type="text"
@@ -99,7 +99,7 @@ export const WeatherForecast = () => {
                   className="w-full text-xs pl-9 pr-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-400"
                 />
               </div>
-              <button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm cursor-pointer">
+              <button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm cursor-pointer shrink-0">
                 {t('search')}
               </button>
             </form>

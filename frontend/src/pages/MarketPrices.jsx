@@ -181,13 +181,13 @@ export const MarketPrices = () => {
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
       {/* Header Banner */}
-      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950">
+      <div className="min-h-[7rem] w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 flex items-center">
         <img
           src={marketImg}
           alt={t('marketTitle')}
-          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
+        <div className="relative z-10 w-full bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
             <div>
               <div className="flex items-center gap-2 text-white">
@@ -198,12 +198,12 @@ export const MarketPrices = () => {
             </div>
 
             {/* Filter buttons */}
-            <div className="flex gap-1 bg-white/10 backdrop-blur-md border border-white/20 p-1.5 rounded-xl shrink-0 self-start sm:self-auto">
+            <div className="flex gap-1 bg-white/10 backdrop-blur-md border border-white/20 p-1.5 rounded-xl shrink-0 self-start sm:self-auto overflow-x-auto max-w-full">
               {[t('all'), t('grains'), t('oilseeds'), t('vegetables')].map(cat => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 md:text-sm ${selectedCategory === cat ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 md:text-sm shrink-0 ${selectedCategory === cat ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
                 >
                   {cat}
                 </button>
