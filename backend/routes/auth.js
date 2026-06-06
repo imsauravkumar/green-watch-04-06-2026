@@ -6,6 +6,11 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
+const getClientIp = (req) => {
+  if (!req) return "Unknown";
+  return req.headers['x-forwarded-for'] || req.ip || (req.socket && req.socket.remoteAddress) || "Unknown";
+};
+
 const generateToken = (id, email, role) => {
   const secret = process.env.JWT_SECRET || 'greenwatch_dev_jwt_secret_key_12345_super_secure';
   return jwt.sign({ id, email, role }, secret, { expiresIn: '30d' });
@@ -46,6 +51,7 @@ router.post('/register', async (req, res) => {
         location: location || "Not Specified",
         role: finalRole,
         profilePhoto: "default-plant",
+        ip: getClientIp(req),
         createdAt: new Date().toISOString()
       };
 
@@ -73,7 +79,8 @@ router.post('/register', async (req, res) => {
         name,
         location: location || "Not Specified",
         role: finalRole,
-        profilePhoto: "default-plant"
+        profilePhoto: "default-plant",
+        ip: getClientIp(req)
       });
 
       return res.status(201).json({
@@ -108,6 +115,8 @@ router.post('/login', async (req, res) => {
       const user = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
       if (user && (await bcrypt.compare(password, user.password))) {
+        user.ip = getClientIp(req);
+        writeMockDb(db);
         return res.json({
           id: user.id,
           name: user.name,
@@ -124,6 +133,8 @@ router.post('/login', async (req, res) => {
       const user = await User.findOne({ email: email.toLowerCase() });
 
       if (user && (await bcrypt.compare(password, user.password))) {
+        user.ip = getClientIp(req);
+        await user.save();
         return res.json({
           _id: user._id,
           name: user.name,
@@ -164,6 +175,7 @@ router.post('/sync-firebase', async (req, res) => {
       const db = getMockDb();
       let user = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
+      const clientIp = getClientIp(req);
       if (!user) {
         user = {
           id: `firebase-${Date.now()}`,
@@ -173,6 +185,7 @@ router.post('/sync-firebase', async (req, res) => {
           location: location || "Not Specified",
           role: finalRole,
           profilePhoto: profilePhoto || "default-plant",
+          ip: clientIp,
           createdAt: new Date().toISOString()
         };
         db.users.push(user);
@@ -184,6 +197,7 @@ router.post('/sync-firebase', async (req, res) => {
         if (location) user.location = location;
         if (profilePhoto) user.profilePhoto = profilePhoto;
         if (name) user.name = name;
+        user.ip = clientIp;
         writeMockDb(db);
       }
 
@@ -199,6 +213,7 @@ router.post('/sync-firebase', async (req, res) => {
     } else {
       let user = await User.findOne({ email: email.toLowerCase() });
 
+      const clientIp = getClientIp(req);
       if (!user) {
         user = await User.create({
           email: email.toLowerCase(),
@@ -206,7 +221,8 @@ router.post('/sync-firebase', async (req, res) => {
           name,
           location: location || "Not Specified",
           role: finalRole,
-          profilePhoto: profilePhoto || "default-plant"
+          profilePhoto: profilePhoto || "default-plant",
+          ip: clientIp
         });
       } else {
         // Update existing user model properties
@@ -229,6 +245,10 @@ router.post('/sync-firebase', async (req, res) => {
         }
         if (name && user.name !== name) {
           user.name = name;
+          needsSave = true;
+        }
+        if (user.ip !== clientIp) {
+          user.ip = clientIp;
           needsSave = true;
         }
         if (needsSave) {

@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  ip: {
+    type: String,
+    default: "Unknown"
   }
 });
 

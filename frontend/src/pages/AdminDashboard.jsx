@@ -623,13 +623,14 @@ export const AdminDashboard = () => {
                         <th className="px-6 py-3.5 text-left">{t('colEmailAddr')}</th>
                         <th className="px-6 py-3.5 text-left">{t('colAssignedRole')}</th>
                         <th className="px-6 py-3.5 text-left">{t('colLocation')}</th>
+                        <th className="px-6 py-3.5 text-left">IP Address</th>
                         <th className="px-6 py-3.5 text-center">{t('colActions')}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-medium bg-white">
                       {filteredUsers.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="text-center py-8 text-slate-400">
+                          <td colSpan={6} className="text-center py-8 text-slate-400">
                             {fetchError ? '⚠ Could not load users — see error above' : t('noUsersFoundFilter')}
                           </td>
                         </tr>
@@ -647,6 +648,7 @@ export const AdminDashboard = () => {
                               </span>
                             </td>
                             <td className="px-6 py-3.5 text-sm text-slate-505">{u.location}</td>
+                            <td className="px-6 py-3.5 text-sm font-mono text-slate-505">{u.ip || "Unknown"}</td>
                             <td className="px-6 py-3.5 text-center text-sm">
                               {u.role !== 'admin' && (
                                 <button
@@ -686,6 +688,7 @@ export const AdminDashboard = () => {
                           <div className="space-y-1 text-xs text-slate-500">
                             <div><span className="font-bold text-slate-400 uppercase tracking-wider text-[9px] mr-1.5">Email:</span>{u.email}</div>
                             <div><span className="font-bold text-slate-400 uppercase tracking-wider text-[9px] mr-1.5">Location:</span>{u.location || 'N/A'}</div>
+                            <div><span className="font-bold text-slate-400 uppercase tracking-wider text-[9px] mr-1.5">IP Address:</span><span className="font-mono text-[11px]">{u.ip || 'Unknown'}</span></div>
                           </div>
 
                           {u.role !== 'admin' && (
