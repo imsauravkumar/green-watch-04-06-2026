@@ -322,47 +322,58 @@ export const Marketplace = () => {
 
       {/* Redesigned Glassmorphic Tabs Bar */}
       {isSeller && (
-        <div className="flex bg-slate-900/5 border border-slate-200 p-1.5 rounded-xl gap-2 w-fit max-w-full overflow-x-auto">
-          <button
-            onClick={() => { setActiveTab('catalog'); setShowAddForm(false); }}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 ${
-              activeTab === 'catalog'
-                ? 'bg-white text-emerald-850 shadow-sm border border-slate-200'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
-            }`}
-          >
-            <Store className="w-3.5 h-3.5" />
-            {t('browseCatalog') || 'Browse Catalog'}
-          </button>
-          
-          <button
-            onClick={() => { setActiveTab('my-listings'); }}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 ${
-              activeTab === 'my-listings'
-                ? 'bg-white text-emerald-850 shadow-sm border border-slate-200'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
-            }`}
-          >
-            <Package className="w-3.5 h-3.5" />
-            {t('myInventory') || 'My Listings & Stock'}
-          </button>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex bg-slate-900/5 border border-slate-200 p-1.5 rounded-xl gap-2 w-fit max-w-full overflow-x-auto">
+            <button
+              onClick={() => { setActiveTab('catalog'); setShowAddForm(false); }}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 ${
+                activeTab === 'catalog'
+                  ? 'bg-white text-emerald-850 shadow-sm border border-slate-200'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+              }`}
+            >
+              <Store className="w-3.5 h-3.5" />
+              {t('browseCatalog') || 'Browse Catalog'}
+            </button>
+            
+            <button
+              onClick={() => { setActiveTab('my-listings'); }}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 ${
+                activeTab === 'my-listings'
+                  ? 'bg-white text-emerald-850 shadow-sm border border-slate-200'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+              }`}
+            >
+              <Package className="w-3.5 h-3.5" />
+              {t('myInventory') || 'My Listings & Stock'}
+            </button>
 
-          <button
-            onClick={() => { setActiveTab('requests'); setShowAddForm(false); }}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 ${
-              activeTab === 'requests'
-                ? 'bg-white text-emerald-850 shadow-sm border border-slate-200'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
-            }`}
-          >
-            <Users className="w-3.5 h-3.5" />
-            {t('buyerRequests') || 'Buyer Requests'}
-            {unreadRequestCount > 0 && (
-              <span className="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full animate-pulse">
-                {unreadRequestCount}
-              </span>
-            )}
-          </button>
+            <button
+              onClick={() => { setActiveTab('requests'); setShowAddForm(false); }}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 flex items-center gap-2 ${
+                activeTab === 'requests'
+                  ? 'bg-white text-emerald-850 shadow-sm border border-slate-200'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              {t('buyerRequests') || 'Buyer Requests'}
+              {unreadRequestCount > 0 && (
+                <span className="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full animate-pulse">
+                  {unreadRequestCount}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {activeTab === 'my-listings' && (
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm w-fit cursor-pointer"
+            >
+              <Plus className="w-4 h-4" /> {showAddForm ? t('cancelListing') || 'Cancel' : t('addProductSale') || 'Add Product'}
+            </button>
+          )}
         </div>
       )}
 
@@ -543,9 +554,27 @@ export const Marketplace = () => {
         /* ── Product Catalog & Inventory grid ── */
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {(activeTab === 'my-listings' ? myInventoryProducts : catalogProducts).length === 0 ? (
-            <div className="col-span-full text-center py-20 text-slate-400 text-xs">
-              {t('noProductsFound')}
-            </div>
+            activeTab === 'my-listings' ? (
+              <div className="col-span-full text-center py-16 bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col items-center justify-center space-y-4">
+                <Package className="w-12 h-12 text-slate-300" />
+                <div>
+                  <p className="text-sm font-bold text-slate-700">No listings found</p>
+                  <p className="text-xs text-slate-400 mt-1">You haven't listed any products for sale yet.</p>
+                </div>
+                {isSeller && (
+                  <button
+                    onClick={() => setShowAddForm(true)}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" /> Add Product for Sale
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="col-span-full text-center py-20 text-slate-400 text-xs">
+                {t('noProductsFound')}
+              </div>
+            )
           ) : (
             (activeTab === 'my-listings' ? myInventoryProducts : catalogProducts).map((p) => {
               const pid = p._id || p.id;
