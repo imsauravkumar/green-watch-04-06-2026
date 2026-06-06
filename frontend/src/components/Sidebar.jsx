@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../hooks/useTranslation';
 import Modal from './Modal';
@@ -18,13 +18,17 @@ import {
   ScrollText,
   User,
   ShieldCheck,
-  LogOut
+  LogOut,
+  Store,
+  Mail,
+  Megaphone
 } from 'lucide-react';
 
 export const Sidebar = ({ isOpen, onClose }) => {
   const { user, logout, isAdmin, isFarmer, isSeller } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const handleLogout = async () => {
@@ -33,22 +37,33 @@ export const Sidebar = ({ isOpen, onClose }) => {
     navigate('/');
   };
 
+  const isRouteActive = (to) => {
+    const currentPath = location.pathname + location.search;
+    if (to.includes('?')) {
+      return currentPath === to;
+    }
+    if (location.pathname === '/admin') {
+      return currentPath === to || (to === '/admin' && (!location.search || location.search === '?tab=users'));
+    }
+    return location.pathname === to;
+  };
+
   // ─── Grouped sections ────────────────────────────────────────────────────
   const sections = [
     {
       heading: 'OVERVIEW',
       items: [
-        { to: '/dashboard', label: t('farmDashboard'),   icon: LayoutDashboard, show: true },
-        { to: '/weather',   label: t('weatherForecast'), icon: CloudSun,         show: true },
+        { to: '/dashboard', label: t('farmDashboard'),   icon: LayoutDashboard, show: !isAdmin },
+        { to: '/weather',   label: t('weatherForecast'), icon: CloudSun,         show: !isAdmin },
       ],
     },
     {
       heading: 'FARMING TOOLS',
       items: [
-        { to: '/crop-health',    label: t('cropHealth'),    icon: Camera,       show: isFarmer },
-        { to: '/pest-control',   label: t('pestDetection'), icon: Bug,          show: isFarmer },
         { to: '/crop-rec',       label: t('cropRec'),       icon: Sprout,       show: isFarmer },
         { to: '/fertilizer-rec', label: t('fertilizerRec'), icon: FlaskConical, show: isFarmer },
+        { to: '/crop-health',    label: t('cropHealth'),    icon: Camera,       show: isFarmer },
+        { to: '/pest-control',   label: t('pestDetection'), icon: Bug,          show: isFarmer },
         { to: '/market-prices',  label: t('marketPrice'),   icon: TrendingUp,   show: isFarmer },
         { to: '/gps-mapping',    label: t('gpsMapping'),    icon: MapPin,       show: isFarmer },
       ],
@@ -56,17 +71,26 @@ export const Sidebar = ({ isOpen, onClose }) => {
     {
       heading: 'COMMUNITY',
       items: [
-        { to: '/marketplace',  label: t('navMarketplace'),      icon: ShoppingBasket, show: isFarmer || isSeller },
-        { to: '/community',    label: t('navCommunity'),        icon: Users,          show: true },
-        { to: '/chatbot',      label: t('expertChatbot'),       icon: MessageCircle,  show: true },
-        { to: '/gov-notices',  label: t('navGovNotices'),     icon: ScrollText,     show: true },
+        { to: '/community',    label: t('navCommunity'),        icon: Users,          show: !isAdmin },
+        { to: '/chatbot',      label: t('expertChatbot'),       icon: MessageCircle,  show: !isAdmin },
+        { to: '/marketplace',  label: t('navMarketplace'),      icon: ShoppingBasket, show: (isFarmer || isSeller) && !isAdmin },
+        { to: '/gov-notices',  label: t('navGovNotices'),     icon: ScrollText,     show: !isAdmin },
+      ],
+    },
+    {
+      heading: 'ADMIN CONSOLE',
+      items: [
+        { to: '/admin?tab=users', label: 'Users', icon: Users, show: isAdmin },
+        { to: '/admin?tab=products', label: 'Products', icon: Store, show: isAdmin },
+        { to: '/admin?tab=messages', label: 'Contact', icon: Mail, show: isAdmin },
+        { to: '/admin?tab=notices', label: 'Gov Notices', icon: ScrollText, show: isAdmin },
+        { to: '/admin?tab=prices', label: 'Market Rate', icon: TrendingUp, show: isAdmin },
       ],
     },
     {
       heading: 'ACCOUNT',
       items: [
         { to: '/profile', label: t('navProfile'), icon: User,        show: true },
-        { to: '/admin',   label: t('navAdmin'),   icon: ShieldCheck, show: isAdmin },
       ],
     },
   ];
@@ -92,6 +116,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         <nav className="flex-1 overflow-y-auto sidebar-scroll py-4 px-3 space-y-4">
           {sections.map((section, si) => {
             const visible = section.items.filter(i => i.show);
+            visible.sort((a, b) => a.label.localeCompare(b.label));
             if (visible.length === 0) return null;
 
             return (
@@ -105,31 +130,28 @@ export const Sidebar = ({ isOpen, onClose }) => {
                 <div className="space-y-1">
                   {visible.map(item => {
                     const Icon = item.icon;
+                    const active = isRouteActive(item.to);
                     return (
                       <NavLink
                         key={item.to}
                         to={item.to}
                         onClick={onClose}
-                        className={({ isActive }) =>
+                        className={
                           `group flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 ${
-                            isActive
+                            active
                               ? 'bg-gradient-to-r from-emerald-600 to-teal-650 text-white shadow-md shadow-emerald-950/40'
                               : 'text-slate-400 hover:bg-slate-800/80 hover:text-white'
                           }`
                         }
                       >
-                        {({ isActive }) => (
-                          <>
-                            <Icon
-                              className={`h-4 w-4 shrink-0 transition-colors ${
-                                isActive
-                                  ? 'text-white'
-                                  : 'text-slate-500 group-hover:text-slate-300'
-                              }`}
-                            />
-                            <span className="truncate">{item.label}</span>
-                          </>
-                        )}
+                        <Icon
+                          className={`h-4 w-4 shrink-0 transition-colors ${
+                            active
+                              ? 'text-white'
+                              : 'text-slate-500 group-hover:text-slate-300'
+                          }`}
+                        />
+                        <span className="truncate">{item.label}</span>
                       </NavLink>
                     );
                   })}

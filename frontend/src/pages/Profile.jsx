@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { User, MapPin, Shield, Mail, Camera, Trash2, CheckCircle } from 'lucide-react';
+import authSideImg from '../assets/auth_side.jpg';
 
 export const Profile = () => {
   const { user, updateProfileDetails } = useAuth();
@@ -50,17 +51,25 @@ export const Profile = () => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-slate-50">
-      <div className="min-h-full flex flex-col items-center justify-center p-6">
-        <div className="w-full max-w-xl">
-
-          {/* Title */}
-          <div className="mb-6 text-center">
-            <h1 className="text-xl font-bold tracking-tight text-slate-900">{t('profileTitle')}</h1>
-            <p className="text-xs text-slate-500 mt-1">{t('profileDesc')}</p>
+    <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
+      
+      {/* Header Banner */}
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 shrink-0">
+        <img
+          src={authSideImg}
+          alt={t('profileTitle')}
+          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
+          <div className="flex items-center gap-2 text-white">
+            <User className="w-6 h-6 text-emerald-400" />
+            <h1 className="text-lg font-bold tracking-tight md:text-xl">{t('profileTitle')}</h1>
           </div>
+          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed md:text-sm">{t('profileDesc')}</p>
+        </div>
+      </div>
 
-          <div className="w-full bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+      <div className="max-w-xl mx-auto w-full bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
             
             {/* Profile Picture */}
             <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-slate-100 mb-6">
@@ -77,7 +86,7 @@ export const Profile = () => {
               </div>
 
               <div className="space-y-2 text-center sm:text-left">
-                <h3 className="font-bold text-slate-800 text-sm">{t('avatarPicture')}</h3>
+                <h3 className="font-bold text-slate-800 text-sm">{name || 'User'}</h3>
                 <p className="text-[10px] text-slate-400">{t('uploadHighRes')}</p>
                 <div className="flex items-center gap-2">
                   <label htmlFor="photo-upload-btn" className="text-[10px] font-bold px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-md transition-colors cursor-pointer border border-emerald-100">
@@ -142,8 +151,6 @@ export const Profile = () => {
             </form>
 
           </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -30,6 +30,7 @@ import marketImg from '../assets/market.png';
 import gpsImg from '../assets/gps.png';
 import marketExchangeImg from '../assets/market_exchange.png';
 import communityImg from '../assets/community.png';
+import dashboardImg from '../assets/dashboard.png';
 
 export const Dashboard = () => {
   const { user, isFarmer, isSeller } = useAuth();
@@ -119,23 +120,28 @@ export const Dashboard = () => {
   return (
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
-      {/* Header Info */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-3xl overflow-hidden shadow-inner">
+      {/* Header Info Banner */}
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 flex flex-col md:flex-row md:items-center justify-between p-6 text-white shrink-0">
+        <img
+          src={dashboardImg}
+          alt="Dashboard"
+          className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay animate-fade-in pointer-events-none"
+        />
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="h-14 w-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-3xl overflow-hidden shadow-inner shrink-0">
             {user?.photoURL === "default-plant" ? "🌱" : user?.photoURL ? <img src={user.photoURL} alt={user.displayName} className="h-full w-full object-cover" /> : "👤"}
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <h1 className="text-lg font-bold tracking-tight md:text-xl flex items-center gap-2">
               {t('welcomeBack')}, {user?.displayName}!
             </h1>
-            <p className="text-xs text-slate-500 flex items-center gap-4 mt-1 font-medium">
+            <p className="text-xs text-slate-300 flex items-center gap-4 mt-1 font-medium md:text-sm">
               <span className="flex items-center gap-1"><User className="w-3.5 h-3.5 text-slate-400" /> {getRoleLabel()}</span>
               <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-slate-400" /> {user?.location || t('notSpecified')}</span>
             </p>
           </div>
         </div>
-        <Link to="/profile" className="text-xs font-semibold px-4 py-2 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5 self-start md:self-auto">
+        <Link to="/profile" className="relative z-10 text-xs font-semibold px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 text-white rounded-lg transition-all flex items-center justify-center gap-1.5 self-start md:self-auto cursor-pointer">
           {t('editProfile')} <ArrowUpRight className="w-3.5 h-3.5" />
         </Link>
       </div>

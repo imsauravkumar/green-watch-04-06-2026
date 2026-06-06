@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, Send, Bot, User, Sparkles } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
+import chatbotImg from '../assets/chatbot.png';
 
 export const Chatbot = () => {
   const { t } = useTranslation();
@@ -83,12 +84,20 @@ export const Chatbot = () => {
   return (
     <div className="flex-1 p-6 flex flex-col h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] bg-slate-50 text-left">
       
-      {/* Title */}
-      <div className="mb-4">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-          <MessageSquare className="w-5 h-5 text-emerald-600" /> {t('chatbotTitle')}
-        </h1>
-        <p className="text-xs text-slate-500">{t('chatbotDesc')}</p>
+      {/* Header Banner */}
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 shrink-0 mb-4 animate-fade-in">
+        <img
+          src={chatbotImg}
+          alt={t('chatbotTitle')}
+          className="w-full h-full object-cover opacity-60 mix-blend-overlay pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white">
+          <div className="flex items-center gap-2 text-white">
+            <MessageSquare className="w-6 h-6 text-emerald-400" />
+            <h1 className="text-lg font-bold tracking-tight md:text-xl">{t('chatbotTitle')}</h1>
+          </div>
+          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed md:text-sm">{t('chatbotDesc')}</p>
+        </div>
       </div>
 
       {/* Chat Container */}

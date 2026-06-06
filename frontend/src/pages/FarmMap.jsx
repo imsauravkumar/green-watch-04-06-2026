@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { MapPin, RefreshCw, Trash2, Sprout, ShieldCheck } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
+import gpsImg from '../assets/gps.png';
 
 export const FarmMap = () => {
   const { t } = useTranslation();
@@ -73,12 +74,20 @@ export const FarmMap = () => {
   return (
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
-      {/* Title */}
-      <div>
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-          <MapPin className="w-5 h-5 text-emerald-600" /> {t('farmMapTitle')}
-        </h1>
-        <p className="text-xs text-slate-500">{t('farmMapDesc')}</p>
+      {/* Header Banner */}
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950">
+        <img
+          src={gpsImg}
+          alt={t('farmMapTitle')}
+          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
+          <div className="flex items-center gap-2 text-white">
+            <MapPin className="w-6 h-6 text-emerald-400" />
+            <h1 className="text-lg font-bold tracking-tight md:text-xl">{t('farmMapTitle')}</h1>
+          </div>
+          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed md:text-sm">{t('farmMapDesc')}</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

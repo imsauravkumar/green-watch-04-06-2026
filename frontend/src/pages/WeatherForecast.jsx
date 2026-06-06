@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { apiFetch } from '../api';
+import weatherImg from '../assets/weather.png';
 import { 
   CloudSun, 
   Search, 
@@ -67,31 +68,43 @@ export const WeatherForecast = () => {
   return (
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
-      {/* Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-            <CloudSun className="w-5 h-5 text-emerald-600" /> {t('weatherForecast')}
-          </h1>
-          <p className="text-xs text-slate-500">{t('extendedForecast')} — {t('humidity')}, {t('windSpeed')}, {t('rainfall')}</p>
-        </div>
+      {/* Header Banner */}
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950">
+        <img
+          src={weatherImg}
+          alt={t('weatherForecast')}
+          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
+            <div>
+              <div className="flex items-center gap-2 text-white">
+                <CloudSun className="w-6 h-6 text-emerald-400" />
+                <h1 className="text-lg font-bold tracking-tight md:text-xl">{t('weatherForecast')}</h1>
+              </div>
+              <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed md:text-sm">
+                {t('extendedForecast')} — {t('humidity')}, {t('windSpeed')}, {t('rainfall')}
+              </p>
+            </div>
 
-        {/* Search */}
-        <form onSubmit={handleSearch} className="flex gap-2 self-start sm:self-auto">
-          <div className="relative w-60">
-            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
-            <input
-              type="text"
-              placeholder={t('searchCityState')}
-              value={locationInput}
-              onChange={(e) => setLocationInput(e.target.value)}
-              className="w-full text-xs pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
+            {/* Search */}
+            <form onSubmit={handleSearch} className="flex gap-2 self-start sm:self-auto shrink-0 z-10">
+              <div className="relative w-60">
+                <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder={t('searchCityState')}
+                  value={locationInput}
+                  onChange={(e) => setLocationInput(e.target.value)}
+                  className="w-full text-xs pl-9 pr-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-400"
+                />
+              </div>
+              <button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm cursor-pointer">
+                {t('search')}
+              </button>
+            </form>
           </div>
-          <button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
-            {t('search')}
-          </button>
-        </form>
+        </div>
       </div>
 
       {error && (

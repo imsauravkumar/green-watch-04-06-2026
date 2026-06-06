@@ -94,18 +94,18 @@ export const PestControl = () => {
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
       {/* Header Banner */}
-      <div className="h-40 w-full rounded-2xl overflow-hidden relative shadow-md bg-slate-950">
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950">
         <img
           src={pestImg}
           alt={t('pestControlTitle')}
           className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent flex flex-col justify-end p-6">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
           <div className="flex items-center gap-2 text-white">
             <Bug className="w-6 h-6 text-emerald-400" />
-            <h1 className="text-lg font-bold tracking-tight">{t('pestControlTitle')}</h1>
+            <h1 className="text-lg font-bold tracking-tight md:text-xl">{t('pestControlTitle')}</h1>
           </div>
-          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed">{t('pestControlDesc')}</p>
+          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed md:text-sm">{t('pestControlDesc')}</p>
         </div>
       </div>
 

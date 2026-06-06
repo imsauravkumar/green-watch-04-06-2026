@@ -23,7 +23,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { Dialog } from '@headlessui/react';
-import marketImg from '../assets/market.png';
+import marketExchangeImg from '../assets/market_exchange.png';
 
 export const Marketplace = () => {
   const { user, isSeller, isFarmer, isAdmin } = useAuth();
@@ -266,17 +266,17 @@ export const Marketplace = () => {
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
 
       {/* Header Banner */}
-      <div className="h-44 w-full rounded-2xl overflow-hidden relative shadow-md bg-slate-950">
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950">
         <img
-          src={marketImg}
+          src={marketExchangeImg}
           alt="Marketplace"
-          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in"
+          className="w-full h-full object-cover opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent flex flex-col justify-center p-6">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
           <div className="flex items-center justify-between w-full text-white">
             <div className="flex items-center gap-2">
               <Store className="w-6 h-6 text-emerald-400" />
-              <h1 className="text-lg font-bold tracking-tight">Agriculture Market</h1>
+              <h1 className="text-lg font-bold tracking-tight md:text-xl">Agriculture Market</h1>
               {isSeller && unreadRequestCount > 0 && (
                 <span className="inline-flex items-center gap-1 bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full animate-pulse">
                   <Bell className="w-2.5 h-2.5" />
@@ -286,10 +286,10 @@ export const Marketplace = () => {
             </div>
 
             {/* Actions aligned on the far right (last) */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={fetchProducts}
-                className="p-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white rounded-lg transition-all shadow-sm"
+                className="p-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white rounded-lg transition-all shadow-sm cursor-pointer"
                 title="Refresh Catalog"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -298,14 +298,14 @@ export const Marketplace = () => {
               {isSeller && activeTab === 'my-listings' && (
                 <button
                   onClick={() => setShowAddForm(!showAddForm)}
-                  className="bg-gradient-to-r from-emerald-500 to-teal-650 hover:from-emerald-600 hover:to-teal-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition-all shadow-md shadow-emerald-950/50"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-650 hover:from-emerald-600 hover:to-teal-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition-all shadow-md shadow-emerald-950/50 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" /> {showAddForm ? t('cancelListing') || 'Cancel' : t('addProductSale') || 'Add Product'}
                 </button>
               )}
             </div>
           </div>
-          <p className="text-xs text-slate-300 mt-2.5 max-w-xl leading-relaxed">
+          <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed md:text-sm">
             {t('marketplaceDesc') || 'Direct buyer-seller platform for crop harvests, farming tools & verified seeds.'}
           </p>
         </div>

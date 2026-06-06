@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
 import { apiFetch } from '../api';
+import communityImg from '../assets/community.png';
 
 export const Community = () => {
   const { user } = useAuth();
@@ -137,22 +138,32 @@ export const Community = () => {
   return (
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
       
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-            <Users className="w-5 h-5 text-emerald-600" /> {t('farmerCommunity')}
-          </h1>
-          <p className="text-xs text-slate-500">{t('shareTipsDesc')}</p>
-        </div>
+      {/* Header Banner */}
+      <div className="h-28 w-full rounded-2xl overflow-hidden relative shadow-md bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950">
+        <img
+          src={communityImg}
+          alt={t('farmerCommunity')}
+          className="w-full h-full object-cover object-top opacity-60 mix-blend-overlay animate-fade-in pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-center p-6 text-white animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
+            <div>
+              <div className="flex items-center gap-2 text-white">
+                <Users className="w-6 h-6 text-emerald-400" />
+                <h1 className="text-lg font-bold tracking-tight md:text-xl">{t('farmerCommunity')}</h1>
+              </div>
+              <p className="text-xs text-slate-300 mt-1.5 max-w-xl leading-relaxed md:text-sm">{t('shareTipsDesc')}</p>
+            </div>
 
-        {/* Add Post Trigger button */}
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm self-start sm:self-auto"
-        >
-          <Plus className="w-4 h-4" /> {showAddForm ? t('cancelPost') : t('askQuestionBtn')}
-        </button>
+            {/* Add Post Trigger button */}
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1 transition-colors shadow-sm self-start sm:self-auto shrink-0 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" /> {showAddForm ? t('cancelPost') : t('askQuestionBtn')}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* New Post Form Panel */}
