@@ -38,10 +38,10 @@ export const WeatherForecast = () => {
         const data = await res.json();
         setWeather(data);
       } else {
-        setError("Failed to fetch weather data for that location.");
+        setError(t('weatherFailed'));
       }
     } catch (err) {
-      setError("Network error fetching weather.");
+      setError(t('networkError'));
     } finally {
       setLoading(false);
     }
@@ -195,13 +195,13 @@ export const WeatherForecast = () => {
                   key={idx}
                   className="bg-slate-50/50 border border-slate-150 rounded-xl p-3.5 text-center flex flex-col items-center shadow-inner"
                 >
-                  <span className="text-xs font-bold text-slate-600">{day.day}</span>
-                  <span className="text-[10px] text-slate-400">{day.date}</span>
-                  <span className="text-3xl my-3">{weatherIcons[day.condition] || "☀️"}</span>
-                  <div className="space-y-1">
-                    <span className="text-sm font-extrabold text-slate-900 block leading-none">{day.tempMax}°C</span>
-                    <span className="text-[10px] font-medium text-slate-400 block leading-none">{day.tempMin}°C</span>
-                  </div>
+                  <span className="text-xs sm:text-sm font-bold text-slate-600">{t(day.day.toLowerCase())}</span>
+                <span className="text-[10px] sm:text-xs text-slate-400">{day.date}</span>
+                <span className="text-3xl my-3">{weatherIcons[day.condition] || "☀️"}</span>
+                <div className="space-y-1">
+                  <span className="text-sm sm:text-base font-extrabold text-slate-900 block leading-none">{day.tempMax}°C</span>
+                  <span className="text-[10px] sm:text-xs font-medium text-slate-400 block leading-none">{day.tempMin}°C</span>
+                </div>
                   <div className="flex gap-2 text-[8px] text-slate-400 mt-4 border-t border-slate-200 pt-2 w-full justify-center">
                     <span className="flex items-center gap-0.5"><Droplet className="w-2.5 h-2.5 text-sky-400" /> {day.humidity}%</span>
                     {day.rainfall > 0 && <span className="flex items-center gap-0.5 text-blue-500 font-bold"><CloudRain className="w-2.5 h-2.5" /> {day.rainfall}mm</span>}

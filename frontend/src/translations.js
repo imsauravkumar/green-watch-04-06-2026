@@ -102,7 +102,6 @@ export const translations = {
     engageExperts: "Engage with agriculture experts",
     notSpecified: "Not Specified",
     location: "Location",
-
     // Weather
     currentTemp: "Current Temperature",
     humidity: "Humidity",
@@ -118,6 +117,14 @@ export const translations = {
     networkError: "Network error fetching weather.",
     windSpeedLabel: "Wind speed",
     rainfallLabel: "Rainfall",
+    // Weekdays
+    sunday: "Sunday",
+    monday: "Monday",
+    tuesday: "Tuesday",
+    wednesday: "Wednesday",
+    thursday: "Thursday",
+    friday: "Friday",
+    saturday: "Saturday",
 
     // Crop Health
     cropHealthTitle: "Crop Health Monitoring",

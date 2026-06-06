@@ -99,7 +99,7 @@ export const Navbar = ({ onToggleSidebar }) => {
           {/* Brand Logo */}
           <Link to={getLogoRedirectPath()} className="flex items-center gap-1.5 sm:gap-2 group">
             <div className="flex h-11 w-11 items-center justify-center rounded-lg overflow-hidden transition-transform group-hover:scale-105">
-              <img src={logo} alt="Green Watch Logo" className="h-full w-full object-contain" />
+              <img src={logo} alt="Green Watch Logo" className="h-10 w-10 object-contain" />
             </div>
             <div>
               <span className="text-sm sm:text-lg font-bold tracking-tight text-slate-900 leading-none block">
