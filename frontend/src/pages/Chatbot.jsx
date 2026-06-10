@@ -28,25 +28,25 @@ export const Chatbot = () => {
   const getBotResponse = (userQuery) => {
     const query = userQuery.toLowerCase();
 
-    if (query.includes('rust') || query.includes('yellow rust') || query.includes('blight')) {
+    if (query.includes('rust') || query.includes('yellow rust') || query.includes('blight') || query.includes('जंग') || query.includes('झुलसा')) {
       return t('botRustResponse');
     }
-    if (query.includes('fertilizer') || query.includes('urea') || query.includes('dap') || query.includes('npk')) {
+    if (query.includes('fertilizer') || query.includes('urea') || query.includes('dap') || query.includes('npk') || query.includes('उर्वरक') || query.includes('यूरिया') || query.includes('खाद')) {
       return t('botFertResponse');
     }
-    if (query.includes('weather') || query.includes('rain') || query.includes('humidity')) {
+    if (query.includes('weather') || query.includes('rain') || query.includes('humidity') || query.includes('मौसम') || query.includes('बारिश') || query.includes('आर्द्रता')) {
       return t('botWeatherResponse');
     }
-    if (query.includes('price') || query.includes('mandi') || query.includes('sell')) {
+    if (query.includes('price') || query.includes('mandi') || query.includes('sell') || query.includes('भाव') || query.includes('मंडी') || query.includes('बेचना') || query.includes('कीमत')) {
       return t('botPriceResponse');
     }
-    if (query.includes('soil') || query.includes('loamy') || query.includes('clay') || query.includes('sandy')) {
+    if (query.includes('soil') || query.includes('loamy') || query.includes('clay') || query.includes('sandy') || query.includes('मिट्टी') || query.includes('दोमट') || query.includes('चिकनी')) {
       return t('botSoilResponse');
     }
-    if (query.includes('pest') || query.includes('bug') || query.includes('aphid') || query.includes('armyworm')) {
+    if (query.includes('pest') || query.includes('bug') || query.includes('aphid') || query.includes('armyworm') || query.includes('कीट') || query.includes('कीड़ा') || query.includes('कीड़े')) {
       return t('botPestResponse');
     }
-    if (query.includes('hello') || query.includes('hi') || query.includes('hey')) {
+    if (query.includes('hello') || query.includes('hi') || query.includes('hey') || query.includes('नमस्ते') || query.includes('हैलो') || query.includes('ਸਤ ਸ੍ਰੀ ਅਕਾਲ')) {
       return t('botHelloResponse');
     }
 

@@ -68,9 +68,11 @@ export const Navbar = ({ onToggleSidebar }) => {
   };
 
   const getRoleLabel = () => {
-    if (!user || !user.role) return "User";
-    if (user.role === 'admin') return "Admin";
-    if (user.role === 'both') return "Farmer & Seller";
+    if (!user || !user.role) return t('farmer');
+    if (user.role === 'admin') return t('admin');
+    if (user.role === 'both') return t('farmerSeller');
+    if (user.role === 'farmer') return t('farmer');
+    if (user.role === 'seller') return t('seller');
     return user.role.charAt(0).toUpperCase() + user.role.slice(1);
   };
 
@@ -106,7 +108,7 @@ export const Navbar = ({ onToggleSidebar }) => {
                 {t('appName')}
               </span>
               <span className="text-[9px] text-emerald-600 font-medium hidden sm:block mt-0.5">
-                A Agriculture Web App
+                {t('tagline')}
               </span>
             </div>
           </Link>
@@ -170,12 +172,12 @@ export const Navbar = ({ onToggleSidebar }) => {
               {showNotifications && (
                 <div className="absolute right-0 mt-2 w-80 origin-top-right rounded-lg bg-white border border-slate-200 p-2 shadow-xl ring-1 ring-black/5 focus:outline-none max-h-96 overflow-y-auto">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-2 px-2 mb-2">
-                    <span className="font-semibold text-xs text-slate-800">Alerts & Broadcasts</span>
-                    <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{notifications.length} Messages</span>
+                    <span className="font-semibold text-xs text-slate-800">{t('alertsBulletins')}</span>
+                    <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{notifications.length}</span>
                   </div>
                   {notifications.length === 0 ? (
                     <div className="py-6 text-center text-xs text-slate-400">
-                      No new broadcasts at this time.
+                      {t('noAlerts')}
                     </div>
                   ) : (
                     <div className="space-y-1">
@@ -233,7 +235,7 @@ export const Navbar = ({ onToggleSidebar }) => {
               to="/login"
               className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-md transition-colors shadow-sm"
             >
-              Portal Login
+              {t('loginToPortal')}
             </Link>
           )}
 

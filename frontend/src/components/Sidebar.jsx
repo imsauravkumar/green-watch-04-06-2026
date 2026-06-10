@@ -51,14 +51,14 @@ export const Sidebar = ({ isOpen, onClose }) => {
   // ─── Grouped sections ────────────────────────────────────────────────────
   const sections = [
     {
-      heading: 'OVERVIEW',
+      heading: t('headingOverview'),
       items: [
         { to: '/dashboard', label: t('farmDashboard'),   icon: LayoutDashboard, show: !isAdmin },
         { to: '/weather',   label: t('weatherForecast'), icon: CloudSun,         show: !isAdmin },
       ],
     },
     {
-      heading: 'FARMING TOOLS',
+      heading: t('headingFarmingTools'),
       items: [
         { to: '/crop-rec',       label: t('cropRec'),       icon: Sprout,       show: isFarmer },
         { to: '/fertilizer-rec', label: t('fertilizerRec'), icon: FlaskConical, show: isFarmer },
@@ -69,7 +69,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ],
     },
     {
-      heading: 'COMMUNITY',
+      heading: t('headingCommunity'),
       items: [
         { to: '/community',    label: t('navCommunity'),        icon: Users,          show: !isAdmin },
         { to: '/chatbot',      label: t('expertChatbot'),       icon: MessageCircle,  show: !isAdmin },
@@ -78,17 +78,17 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ],
     },
     {
-      heading: 'ADMIN CONSOLE',
+      heading: t('headingAdminConsole'),
       items: [
-        { to: '/admin?tab=users', label: 'Users', icon: Users, show: isAdmin },
-        { to: '/admin?tab=products', label: 'Products', icon: Store, show: isAdmin },
-        { to: '/admin?tab=messages', label: 'Contact', icon: Mail, show: isAdmin },
-        { to: '/admin?tab=notices', label: 'Gov Notices', icon: ScrollText, show: isAdmin },
-        { to: '/admin?tab=prices', label: 'Market Rate', icon: TrendingUp, show: isAdmin },
+        { to: '/admin?tab=users', label: t('tabUsers'), icon: Users, show: isAdmin },
+        { to: '/admin?tab=products', label: t('tabProducts'), icon: Store, show: isAdmin },
+        { to: '/admin?tab=messages', label: t('tabContactInbox'), icon: Mail, show: isAdmin },
+        { to: '/admin?tab=notices', label: t('navGovNotices'), icon: ScrollText, show: isAdmin },
+        { to: '/admin?tab=prices', label: t('marketRate'), icon: TrendingUp, show: isAdmin },
       ],
     },
     {
-      heading: 'ACCOUNT',
+      heading: t('headingAccount'),
       items: [
         { to: '/profile', label: t('navProfile'), icon: User,        show: true },
       ],

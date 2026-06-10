@@ -134,7 +134,7 @@ export const WeatherForecast = () => {
                 <span className="text-6xl">{weatherIcons[weather.current.condition] || "☀️"}</span>
                 <div>
                   <span className="text-4xl font-extrabold text-slate-900 tracking-tight">{weather.current.temp}°C</span>
-                  <span className="text-xs font-semibold text-slate-500 block mt-0.5">{weather.current.condition}</span>
+                  <span className="text-xs font-semibold text-slate-500 block mt-0.5">{t(weather.current.condition) || weather.current.condition}</span>
                 </div>
               </div>
               <p className="text-xs text-slate-500 font-medium italic">"{weather.current.description}"</p>

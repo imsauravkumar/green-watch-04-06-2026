@@ -52,20 +52,20 @@ export const Home = () => {
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   const features = [
-    { num: 1, name: "Crop Health Monitoring", desc: "Detect crop diseases using AI and image recognition. Upload a plant image to identify diseases and get organic/chemical treatment suggestions.", icon: Leaf, image: cropHealthImg },
-    { num: 2, name: "Weather Forecast", desc: "Real-time weather updates including rainfall predictions, wind speeds, humidity indices, and daily 7-day temperature trends.", icon: CloudRain, image: weatherImg },
-    { num: 3, name: "Pest Detection & Control", desc: "Identify crop pests. Access biological, organic, and chemical control recommendations to safeguard harvest health.", icon: Bug, image: pestImg },
-    { num: 4, name: "Crop Recommendation System", desc: "Recommend ideal crops based on soil nutrients, season, historical parameters, and atmospheric conditions.", icon: Calculator, image: cropRecImg },
-    { num: 5, name: "Fertilizer Recommendation", desc: "Suggest optimal fertilizer types and required dosages matching your specific crop and soil properties.", icon: Compass, image: fertilizerImg },
-    { num: 6, name: "Farm Dashboard", desc: "View detailed statistics, current growth timelines, weather forecasts, alerts, and notifications in one integrated view.", icon: Map, image: dashboardImg },
-    { num: 7, name: "Market Price Tracking", desc: "Daily crop pricing indexes tracked from local mandis and nearby markets. Decides the best time for you to sell.", icon: TrendingUp, image: marketImg },
-    { num: 8, name: "Alert & Notification System", desc: "Get real-time warning alerts for extreme weather conditions, local pest outbreaks, and customized irrigation reminders.", icon: BellRing, image: alertsImg },
-    { num: 9, name: "GPS Farm Mapping", desc: "Mark coordinates of field boundaries and log specific crop zones on an interactive satellite-style map layout.", icon: MapPin, image: gpsImg },
-    { num: 10, name: "Farmer Community", desc: "Participate in discussion threads. Ask queries, share your agrarian hacks, and exchange tips with other farmers.", icon: Users2, image: communityImg },
-    { num: 11, name: "Multilingual Support", desc: "Read and navigate the portal in English, Hindi (हिंदी), and regional languages (ਪੰਜਾਬੀ) for easier accessibility.", icon: Globe2, image: multilingualImg },
-    { num: 12, name: "Agricultural Expert Chatbot", desc: "24/7 AI-powered agricultural advisor to answer farming questions, pest concerns, and weather guidelines immediately.", icon: Bot, image: chatbotImg },
-    { num: 13, name: "Direct Market Exchange", desc: "Allows farmers to buy directly from sellers, and sellers to update inventory lists, add product stock, and list pictures.", icon: BarChart3, image: marketExchangeImg },
-    { num: 14, name: "Direct Messaging", desc: "Send messages directly to user roles. Direct broadcast messaging pipelines for administrator announcements.", icon: MessageCircle, image: messagingImg }
+    { num: 1, name: t('featCropHealthTitle'), desc: t('featCropHealthDesc'), icon: Leaf, image: cropHealthImg },
+    { num: 2, name: t('featWeatherTitle'), desc: t('featWeatherDesc'), icon: CloudRain, image: weatherImg },
+    { num: 3, name: t('featPestTitle'), desc: t('featPestDesc'), icon: Bug, image: pestImg },
+    { num: 4, name: t('featCropRecTitle'), desc: t('featCropRecDesc'), icon: Calculator, image: cropRecImg },
+    { num: 5, name: t('featFertilizerTitle'), desc: t('featFertilizerDesc'), icon: Compass, image: fertilizerImg },
+    { num: 6, name: t('featDashboardTitle'), desc: t('featDashboardDesc'), icon: Map, image: dashboardImg },
+    { num: 7, name: t('featMarketPriceTitle'), desc: t('featMarketPriceDesc'), icon: TrendingUp, image: marketImg },
+    { num: 8, name: t('featAlertTitle'), desc: t('featAlertDesc'), icon: BellRing, image: alertsImg },
+    { num: 9, name: t('featGPSMapTitle'), desc: t('featGPSMapDesc'), icon: MapPin, image: gpsImg },
+    { num: 10, name: t('featCommunityTitle'), desc: t('featCommunityDesc'), icon: Users2, image: communityImg },
+    { num: 11, name: t('featMultilingualTitle'), desc: t('featMultilingualDesc'), icon: Globe2, image: multilingualImg },
+    { num: 12, name: t('featChatbotTitle'), desc: t('featChatbotDesc'), icon: Bot, image: chatbotImg },
+    { num: 13, name: t('featMarketExchangeTitle'), desc: t('featMarketExchangeDesc'), icon: BarChart3, image: marketExchangeImg },
+    { num: 14, name: t('featMessagingTitle'), desc: t('featMessagingDesc'), icon: MessageCircle, image: messagingImg }
   ];
 
   const handleInputChange = (e) => {
@@ -157,14 +157,14 @@ export const Home = () => {
                 to="/dashboard"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-colors"
               >
-                Dashboard
+                {t('navDashboard')}
               </Link>
             ) : (
               <Link
                 to="/login"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-colors"
               >
-                Login
+                {t('loginToPortal')}
               </Link>
             )}
           </div>
@@ -176,13 +176,13 @@ export const Home = () => {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="flex-1 space-y-6 text-left">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
-              <Leaf className="w-3.5 h-3.5" /> Introducing Green Watch
+              <Leaf className="w-3.5 h-3.5" /> {t('introducingGreenWatch')}
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-              A Modern Digital Ecosystem for <span className="text-emerald-600">Smart Agriculture</span>
+              {t('heroTitleText')}
             </h1>
             <p className="text-base text-slate-600 leading-relaxed">
-              Green Watch bridges the gap between farmers and sellers. Sell or buy products directly without intermediaries, stay updated with real-time weather forecasts, perform crop disease diagnosis, and optimize yields with intelligent recommendations.
+              {t('heroDescText')}
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
               {user ? (
@@ -190,7 +190,7 @@ export const Home = () => {
                   to="/dashboard"
                   className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-6 py-3 rounded-lg shadow-sm transition-colors"
                 >
-                  Enter Dashboard
+                  {t('navDashboard')}
                 </Link>
               ) : (
                 <>
@@ -198,13 +198,13 @@ export const Home = () => {
                     to="/login"
                     className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-6 py-3 rounded-lg shadow-sm transition-colors"
                   >
-                    Login
+                    {t('loginToPortal')}
                   </Link>
                   <Link
                     to="/signup"
                     className="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-semibold px-6 py-3 rounded-lg transition-colors"
                   >
-                    Create Account
+                    {t('createAccount')}
                   </Link>
                 </>
               )}
@@ -225,7 +225,7 @@ export const Home = () => {
             {t('featuresList')}
           </h2>
           <p className="text-sm text-slate-500 max-w-xl mx-auto font-medium">
-            Explore the powerful modules engineered in Green Watch to make agriculture sustainable, profitable, and accessible.
+            {t('featuresDesc')}
           </p>
         </div>
 
@@ -273,9 +273,9 @@ export const Home = () => {
           
           {/* Contact coordinates info */}
           <div className="space-y-6 text-left">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900">Contact Us</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900">{t('contactUs')}</h2>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Have questions regarding portal registration, direct seller accounts, or API keys? Drop us a message, and our system administrator will review it.
+              {t('contactUsDesc')}
             </p>
             
             <div className="space-y-4 pt-4">
@@ -295,7 +295,7 @@ export const Home = () => {
                 <div className="p-2 bg-slate-100 rounded-md">
                   <MapPin className="w-4 h-4 text-slate-500" />
                 </div>
-                <span>Dehradun, India</span>
+                <span>{t('locationLabel2')}</span>
               </div>
             </div>
           </div>
@@ -311,7 +311,7 @@ export const Home = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  placeholder="E.g. Saurav Kumar"
+                  placeholder={t('namePlaceholder')}
                   className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
@@ -335,7 +335,7 @@ export const Home = () => {
                   value={formData.subject}
                   onChange={handleInputChange}
                   required
-                  placeholder="Subject"
+                  placeholder={t('subjectPlaceholder')}
                   className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
@@ -347,7 +347,7 @@ export const Home = () => {
                   onChange={handleInputChange}
                   required
                   rows={4}
-                  placeholder="Describe your inquiry..."
+                  placeholder={t('messagePlaceholder')}
                   className="w-full text-xs px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
                 />
               </div>
@@ -361,7 +361,7 @@ export const Home = () => {
 
               {submitStatus === 'error' && (
                 <div className="text-xs font-medium text-red-700 bg-red-50 p-3 rounded-lg border border-red-100">
-                  Failed to send message. Please verify network connection.
+                  {t('contactError')}
                 </div>
               )}
 
@@ -371,7 +371,7 @@ export const Home = () => {
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5" /> 
-                <span>{loading ? "Sending..." : t('contactSubmit')}</span>
+                <span>{loading ? t('sending') : t('contactSubmit')}</span>
               </button>
             </form>
           </div>
@@ -384,12 +384,12 @@ export const Home = () => {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-left">
             <span className="text-base font-bold text-white block">Green Watch</span>
-            <span className="text-xs text-slate-500 block mt-1">© 2026 Green Watch Agriculture System. All rights reserved.</span>
+            <span className="text-xs text-slate-500 block mt-1">{t('allRightsReserved')}</span>
           </div>
           <div className="flex gap-6 text-xs font-medium">
-            <Link to="/login" className="hover:text-white transition-colors">Portal Login</Link>
-            <Link to="/signup" className="hover:text-white transition-colors">Sign Up</Link>
-            <a href="#features" className="hover:text-white transition-colors">Core Modules</a>
+            <Link to="/login" className="hover:text-white transition-colors">{t('loginToPortal')}</Link>
+            <Link to="/signup" className="hover:text-white transition-colors">{t('createAccount')}</Link>
+            <a href="#features" className="hover:text-white transition-colors">{t('featuresList')}</a>
           </div>
         </div>
       </footer>

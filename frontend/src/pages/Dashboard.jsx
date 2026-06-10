@@ -82,9 +82,11 @@ export const Dashboard = () => {
   };
 
   const getRoleLabel = () => {
-    if (!user || !user.role) return "User";
-    if (user.role === 'admin') return "Administrator";
-    if (user.role === 'both') return "Farmer & Product Seller";
+    if (!user || !user.role) return t('farmer');
+    if (user.role === 'admin') return t('administrator');
+    if (user.role === 'both') return t('farmerSeller');
+    if (user.role === 'farmer') return t('farmer');
+    if (user.role === 'seller') return t('seller');
     return user.role.charAt(0).toUpperCase() + user.role.slice(1);
   };
 
@@ -177,7 +179,7 @@ export const Dashboard = () => {
                       {weather.current.temp}°C
                     </span>
                     <span className="text-xs font-semibold text-slate-500 block mt-0.5">
-                      {weather.current.condition} - {weather.current.description}
+                      {t(weather.current.condition) || weather.current.condition} - {weather.current.description}
                     </span>
                   </div>
                 </div>
@@ -186,17 +188,17 @@ export const Dashboard = () => {
                   <div className="flex flex-col items-center gap-1">
                     <Droplet className="w-4 h-4 text-sky-500" />
                     <span>{weather.current.humidity}%</span>
-                    <span className="text-[9px] text-slate-400 font-normal">Humidity</span>
+                    <span className="text-[9px] text-slate-400 font-normal">{t('humidity')}</span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <Wind className="w-4 h-4 text-teal-500" />
                     <span>{weather.current.windSpeed} km/h</span>
-                    <span className="text-[9px] text-slate-400 font-normal">Wind</span>
+                    <span className="text-[9px] text-slate-400 font-normal">{t('windSpeedLabel')}</span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <CloudRain className="w-4 h-4 text-blue-500" />
                     <span>{weather.current.rainfall} mm</span>
-                    <span className="text-[9px] text-slate-400 font-normal">Rainfall</span>
+                    <span className="text-[9px] text-slate-400 font-normal">{t('rainfallLabel')}</span>
                   </div>
                 </div>
               </div>
@@ -210,7 +212,7 @@ export const Dashboard = () => {
                       key={idx}
                       className="bg-white border border-slate-200 rounded-lg p-2.5 flex flex-col items-center text-center shadow-sm"
                     >
-                      <span className="text-[10px] font-bold text-slate-500 uppercase">{day.day.slice(0, 3)}</span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase">{(t(day.day.toLowerCase()) || day.day).slice(0, 3)}</span>
                       <span className="text-[9px] text-slate-400 mt-0.5">{day.date}</span>
                       <span className="text-2xl my-2">{weatherIcons[day.condition] || "☀️"}</span>
                       <span className="text-xs font-bold text-slate-800">{day.tempMax}°</span>

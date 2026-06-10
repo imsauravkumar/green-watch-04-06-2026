@@ -137,6 +137,13 @@ export const MarketPrices = () => {
     };
   });
 
+  const categoryOptions = [
+    { key: 'All', label: t('all') },
+    { key: 'Grains', label: t('grains') },
+    { key: 'Oilseeds', label: t('oilseeds') },
+    { key: 'Vegetables', label: t('vegetables') },
+  ];
+
   const filteredPrices = priceIndex.filter(p => {
     const matchesSearch = p.crop.toLowerCase().includes(filterQuery.toLowerCase()) || 
                           p.mandi.toLowerCase().includes(filterQuery.toLowerCase());
@@ -166,16 +173,15 @@ export const MarketPrices = () => {
   const totalChange = latestPrice - firstPrice;
   const totalChangePct = ((totalChange / firstPrice) * 100).toFixed(1);
 
-  const isHi = t('appName') === "ग्रीन वॉच";
-  const txtHistoricalTrend = isHi ? "फसल मूल्य इतिहास" : "Crop Price History";
-  const txtSelectCrop = isHi ? "फसल चुनें:" : "Select Crop:";
-  const txtClickRow = isHi ? "इतिहास देखने के लिए किसी फसल पर क्लिक करें" : "Click on any crop row to view history";
-  const txtTenDayTrend = isHi ? "10-दिवसीय मूल्य रुझान" : "10-Day Price Trend";
-  const txtLatestPrice = isHi ? "नवीनतम मूल्य" : "Latest Price";
-  const txtTenDayChange = isHi ? "10-दिवसीय परिवर्तन" : "10-Day Change";
-  const txtMandi = isHi ? "मंडी" : "Mandi";
-  const txtDate = isHi ? "तारीख" : "Date";
-  const txtPrice = isHi ? "मूल्य (₹)" : "Price (₹)";
+  const txtHistoricalTrend = t('historicalTrend');
+  const txtSelectCrop = t('selectCrop');
+  const txtClickRow = t('clickRow');
+  const txtTenDayTrend = t('tenDayTrend');
+  const txtLatestPrice = t('latestPrice');
+  const txtTenDayChange = t('tenDayChange');
+  const txtMandi = t('mandi');
+  const txtDate = t('date');
+  const txtPrice = t('price');
 
   return (
     <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-left">
@@ -199,13 +205,13 @@ export const MarketPrices = () => {
 
             {/* Filter buttons */}
             <div className="flex gap-1 bg-white/10 backdrop-blur-md border border-white/20 p-1.5 rounded-xl shrink-0 self-start sm:self-auto overflow-x-auto max-w-full">
-              {[t('all'), t('grains'), t('oilseeds'), t('vegetables')].map(cat => (
+              {categoryOptions.map(cat => (
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 md:text-sm shrink-0 ${selectedCategory === cat ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
+                  key={cat.key}
+                  onClick={() => setSelectedCategory(cat.key)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 md:text-sm shrink-0 ${selectedCategory === cat.key ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-200 hover:bg-white/10 hover:text-white'}`}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               ))}
             </div>
@@ -219,7 +225,7 @@ export const MarketPrices = () => {
         <div className="space-y-1">
           <span className="font-bold text-sm md:text-base">{t('sellingAdvisory')}</span>
           <p className="text-emerald-700 font-semibold leading-relaxed text-xs md:text-sm">
-            Mustard seed valuations in Jaipur APMC are showing continuous upwards momentum (+2.1%) due to supply contractions. Farmers are recommended to release ready stocks within the next 4 days.
+            {t('sellingAdvisoryDesc')}
           </p>
         </div>
       </div>
