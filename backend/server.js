@@ -23,15 +23,23 @@ connectDB();
 const app = express();
 
 // Middlewares
+const configuredOrigins = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const allowedOrigins = [
   'https://green-watch-04-06-2026.vercel.app',
+  'https://mesaurav.in',
+  'https://www.mesaurav.in',
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:5173',
-  'http://localhost:5174'
+  'http://localhost:5174',
+  ...configuredOrigins
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (mobile apps, curl, Postman, Railway health checks)
     if (!origin) return callback(null, true);
@@ -47,10 +55,12 @@ app.use(cors({
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
 
 // Handle preflight for all routes
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
 // Set body payload limits to support base64 crop image uploads
 app.use(express.json({ limit: '50mb' }));
